@@ -1,0 +1,158 @@
+{
+  "status": "success",
+  "message": "nested SBM",
+  "data": [
+    {
+      "kode_jenis": "1",
+      "jenis": "ASET",
+      "sub_jenis": [
+        {
+          "kode_jenis": "1",
+          "kode_subjenis": "1.1",
+          "keterangan": "ASET LANCAR",
+          "sub_keterangan": [
+            {
+              "kode_subjenis": "1.1",
+              "kode_subketerangan": "1.1.1",
+              "nama_keterangan": "Kas Setara Kas",
+              "debit": 2000000,
+              "kredit": 12000000
+            },
+            {
+              "kode_subjenis": "1.1",
+              "kode_subketerangan": "1.1.2",
+              "nama_keterangan": "Piutang Bunga",
+              "debit": 3000000,
+              "kredit": 15000000
+            },
+            {
+              "kode_subjenis": "1.1",
+              "kode_subketerangan": "1.1.3",
+              "nama_keterangan": "Investasi Jangka Pendek",
+              "debit": 0,
+              "kredit": 10000000
+            },
+            {
+              "kode_subjenis": "1.1",
+              "kode_subketerangan": "1.1.4",
+              "nama_keterangan": "Aset Lancar Lain",
+              "debit": 0,
+              "kredit": 0
+            }
+          ]
+        },
+        {
+            "kode_jenis": "1",
+            "kode_subjenis": "1.2",
+            "keterangan": "ASET TIDAK LANCAR",
+            "sub_keterangan": [
+              {
+                "kode_subjenis": "1.2",
+                "kode_subketerangan": "1.2.1",
+                "nama_keterangan": "Properti Investasi",
+                "debit": 2000000,
+                "kredit": 12000000
+              },
+              {
+                "kode_subjenis": "1.2",
+                "kode_subketerangan": "1.2.2",
+                "nama_keterangan": "Investasi Jangka Pendek",
+                "debit": 3000000,
+                "kredit": 15000000
+              },
+              {
+                "kode_subjenis": "1.1",
+                "kode_subketerangan": "1.2.3",
+                "nama_keterangan": "Aset Tetap",
+                "debit": 0,
+                "kredit": 10000000
+              }
+            ]
+          }
+      ]
+    },
+    {
+        "kode_jenis": "2",
+        "jenis": "LIABILITAS",
+        "sub_jenis": [
+          {
+            "kode_jenis": "2",
+            "kode_subjenis": "2.1",
+            "keterangan": "Liabilitas Jangka Pendek",
+            "sub_keterangan": [
+              {
+                "kode_subjenis": "2.1",
+                "kode_subketerangan": "2.1.1",
+                "nama_keterangan": "Pendapatan diterima di muka",
+                "debit": 2000000,
+                "kredit": 12000000
+              },
+              {
+                "kode_subjenis": "2.1",
+                "kode_subketerangan": "2.1.2",
+                "nama_keterangan": "Utang jangka pendek",
+                "debit": 3000000,
+                "kredit": 15000000
+              }
+            ]
+          },
+          {
+              "kode_jenis": "2",
+              "kode_subjenis": "2.2",
+              "keterangan": "Liabilitas Jangka Panjang",
+              "sub_keterangan": [
+                {
+                  "kode_subjenis": "2.2",
+                  "kode_subketerangan": "2.2.1",
+                  "nama_keterangan": "Utang jangka panjang",
+                  "debit": 2000000,
+                  "kredit": 12000000
+                },
+                {
+                  "kode_subjenis": "2.2",
+                  "kode_subketerangan": "2.2.2",
+                  "nama_keterangan": "Liabilitas imbalan kerja",
+                  "debit": 3000000,
+                  "kredit": 15000000
+                }
+              ]
+            }
+        ]
+      },
+      {
+        "kode_jenis": "3",
+        "jenis": "ASET NETO",
+        "sub_jenis": [
+          {
+            "kode_jenis": "3",
+            "kode_subjenis": "3.1",
+            "keterangan": "Tanpa pembatasan (without restrictions) dari pemberi sumber daya",
+            "sub_keterangan": [
+              {
+                "kode_subjenis": "3.1",
+                "kode_subketerangan": "3.1.1",
+                "nama_keterangan": "Surplus akumulasian",
+                "debit": 2000000,
+                "kredit": 12000000
+              },
+              {
+                "kode_subjenis": "3.1",
+                "kode_subketerangan": "3.1.2",
+                "nama_keterangan": "Penghasilan komprehensif lain",
+                "debit": 3000000,
+                "kredit": 15000000
+              }
+            ]
+          },
+          {
+              "kode_jenis": "3",
+              "kode_subjenis": "3.2",
+              "keterangan": "Dengan pembatasan (with restrictions) dari pemberi sumber daya",
+              "sub_keterangan": [
+                
+              ]
+            }
+        ]
+      }
+  ]
+}

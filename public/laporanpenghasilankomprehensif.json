@@ -1,0 +1,144 @@
+{
+  "status": "success",
+  "message": "nested SBM",
+  "data": [
+    {
+      "kode_jenis": "1",
+      "jenis": "TANPA PEMBATASAN DARI PEMBERI SUMBER DAYA",
+      "sub_jenis": [
+        {
+          "kode_jenis": "1",
+          "kode_subjenis": "1.1",
+          "keterangan": "Pendapatan",
+          "sub_keterangan": [
+            {
+              "kode_subjenis": "1.1",
+              "kode_subketerangan": "1.1.1",
+              "nama_keterangan": "Sumbangan",
+              "debit": 2000000,
+              "kredit": 12000000
+            },
+            {
+              "kode_subjenis": "1.1",
+              "kode_subketerangan": "1.1.2",
+              "nama_keterangan": "Jasa Layanan",
+              "debit": 3000000,
+              "kredit": 15000000
+            },
+            {
+              "kode_subjenis": "1.1",
+              "kode_subketerangan": "1.1.3",
+              "nama_keterangan": "Penghasilan investasi jangka pendek",
+              "debit": 0,
+              "kredit": 10000000
+            },
+            {
+              "kode_subjenis": "1.1",
+              "kode_subketerangan": "1.1.4",
+              "nama_keterangan": "Penghasilan investasi jangka panjang",
+              "debit": 0,
+              "kredit": 0
+            },
+            {
+              "kode_subjenis": "1.1",
+              "kode_subketerangan": "1.1.5",
+              "nama_keterangan": "Lain - lain",
+              "debit": 0,
+              "kredit": 0
+            }
+          ]
+        },
+        {
+          "kode_jenis": "1",
+          "kode_subjenis": "1.2",
+          "keterangan": "Beban",
+          "sub_keterangan": [
+            {
+              "kode_subjenis": "1.2",
+              "kode_subketerangan": "1.2.1",
+              "nama_keterangan": "Gaji, upah",
+              "debit": 2000000,
+              "kredit": 12000000
+            },
+            {
+              "kode_subjenis": "1.2",
+              "kode_subketerangan": "1.2.2",
+              "nama_keterangan": "Jasa dan profesional",
+              "debit": 3000000,
+              "kredit": 15000000
+            },
+            {
+              "kode_subjenis": "1.2",
+              "kode_subketerangan": "1.2.3",
+              "nama_keterangan": "Administratif",
+              "debit": 0,
+              "kredit": 10000000
+            },
+            {
+              "kode_subjenis": "1.2",
+              "kode_subketerangan": "1.2.4",
+              "nama_keterangan": "Depresiasi",
+              "debit": 0,
+              "kredit": 10000000
+            },
+            {
+                "kode_subjenis": "1.2",
+                "kode_subketerangan": "1.2.5",
+                "nama_keterangan": "Bunga",
+                "debit": 0,
+                "kredit": 10000000
+              },
+              {
+                "kode_subjenis": "1.2",
+                "kode_subketerangan": "1.2.6",
+                "nama_keterangan": "Lain - lain",
+                "debit": 0,
+                "kredit": 0
+              }
+          ]
+        }
+      ]
+    },
+    {
+      "kode_jenis": "2",
+      "jenis": "DENGAN PEMBATASAN DARI PEMBERI SUMBER DAYA",
+      "sub_jenis": [
+        {
+          "kode_jenis": "2",
+          "kode_subjenis": "2.1",
+          "keterangan": "Pendapatan",
+          "sub_keterangan": [
+            {
+              "kode_subjenis": "2.1",
+              "kode_subketerangan": "2.1.1",
+              "nama_keterangan": "Sumbangan",
+              "debit": 2000000,
+              "kredit": 12000000
+            },
+            {
+              "kode_subjenis": "2.1",
+              "kode_subketerangan": "2.1.2",
+              "nama_keterangan": "Penghasilan investasi jangka panjang",
+              "debit": 3000000,
+              "kredit": 15000000
+            }
+          ]
+        },
+        {
+          "kode_jenis": "2",
+          "kode_subjenis": "2.2",
+          "keterangan": "Beban",
+          "sub_keterangan": [
+            {
+              "kode_subjenis": "2.2",
+              "kode_subketerangan": "2.2.1",
+              "nama_keterangan": "Kerugian akibat kebakaran",
+              "debit": 2000000,
+              "kredit": 12000000
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

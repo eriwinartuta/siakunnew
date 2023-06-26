@@ -1,0 +1,28 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap");
+.table thead > tr > th {
+  height: 20px;
+  padding: 13px;
+  background-color: whitesmoke;
+  text-align: center;
+  color: black;
+  font-size: 16px;
+  padding-left: 15px;
+  padding-right: 15px;
+  font-weight: 700;
+}
+
+.table tbody > tr > td {
+  height: 10px;
+  padding: 10px;
+  font-size: 16px;
+  border-right-width: 1px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.table {
+  overflow: auto;
+}
+
+.table-striped-rows thead {
+  background-color: #efbcbc;
+}
