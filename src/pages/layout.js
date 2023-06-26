@@ -86,12 +86,10 @@ const Layout = () => {
 
   const fetchMenu = (val) => {
     const data = {
-      url: "https://be1.ut.ac.id/siakunman/menucoba",
+      url: "https://asset.ut.ac.id/siakunman/menucoba",
       data: val,
     };
-
     axiosPost2(data)
-      // console.log("aksi fetch", val)
       .then((a) => {
         console.log("aaa", a);
         if (a?.data?.status === "Success") {
@@ -102,7 +100,7 @@ const Layout = () => {
           const c = a.data.data.data.menu;
           //console.log("token_lama", token_lama);
           dispatch(setMenuStorage(c));
-          fetch("https://be2.ut.ac.id/hrd/pegawai/email/" + user.email)
+          fetch("https://asset.ut.ac.id/hrd/pegawai/email/" + user.email)
             .then((data) => data.json())
             .then((res) => {
               const users = {
@@ -152,11 +150,11 @@ const Layout = () => {
   };
 
   //const { menu } = useSelector((state)=> state.reducerGlobal);
-  const akun = menu.find((a) => a.nama_menu1 === "Akun")?.menu2;
-  const perbankan = menu.find((a) => a.nama_menu1 === "Perbankan")?.menu2;
-  const kartu = menu.find((a) => a.nama_menu1 === "Kartu")?.menu2;
-  const laporan = menu.find((a) => a.nama_menu1 === "Laporan")?.menu2;
-  const utilitas = menu.find((a) => a.nama_menu1 === "Utilitas")?.menu2;
+  const akun = menu?.find((a) => a.nama_menu1 === "Akun")?.menu2;
+  const perbankan = menu?.find((a) => a.nama_menu1 === "Perbankan")?.menu2;
+  const kartu = menu?.find((a) => a.nama_menu1 === "Kartu")?.menu2;
+  const laporan = menu?.find((a) => a.nama_menu1 === "Laporan")?.menu2;
+  const utilitas = menu?.find((a) => a.nama_menu1 === "Utilitas")?.menu2;
 
   const CekLoginBrowser = () => {
     return (
@@ -237,9 +235,9 @@ const Layout = () => {
                 }
               />
               <Route
-                path="/bas/*"
+                path="/saldoawal/*"
                 element={
-                  akun?.some((a) => a.nama_menu2 === "Bagan Akun Standar") ===
+                  akun?.some((a) => a.nama_menu2 === "Saldo Awal") ===
                   true ? (
                     <Suspense fallback={<div> Mohon Menunggu ... </div>}>
                       <BASNew />
