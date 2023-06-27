@@ -21,6 +21,7 @@ import {
 } from "./laporan";
 import { DataSBM, DataSatuan } from "./utilitas";
 import Beranda from "./beranda";
+import BukuBantuBelanja from "./pembukuan/bukubantubelanja";
 
 export {
   MasterJurnal,
@@ -41,5 +42,9 @@ export {
   DataSBM,
   DataSatuan,
   Beranda,
-  ChartOfAccount
+  ChartOfAccount,
+  BukuBantuBelanja,
+  
+  
+
 };
