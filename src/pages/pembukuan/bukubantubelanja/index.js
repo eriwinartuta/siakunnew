@@ -1,8 +1,9 @@
-import { Space, Tabs } from "antd";
+import { Space, Tabs, Radio,Input} from "antd";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setGlobalTitle } from "../../../store/global";
 import { DatePickers, Buttons, Tabel } from "../../../component";
+
 import {
   SyncOutlined,
   EditOutlined,
@@ -15,6 +16,7 @@ import { useState } from "react";
 import { postRekonsiliasi } from "../../../store/rekonsiliasi/action";
 
 const BukuBantuBelanja = () => {
+  const { Search } = Input;
   const { TabPane } = Tabs;
   const dispatch = useDispatch();
   //postrekon
@@ -79,15 +81,7 @@ const BukuBantuBelanja = () => {
         );
       },
     },
-    {
-      title: "Kode Transaksi",
-      dataIndex: "kode_transaksi",
-      key: "kode_transaksi",
-      align: "center",
-      render: (text, record, index) => {
-        return <Space direction="vertical">{text}</Space>;
-      },
-    },
+   
     {
       title: "Deskripsi",
       dataIndex: "keterangan",
@@ -98,9 +92,9 @@ const BukuBantuBelanja = () => {
       },
     },
     {
-      title: "Normalitas",
-      dataIndex: "normalitas",
-      key: "normalitas",
+      title: "Debit",
+      dataIndex: "debit",
+      key: "debit",
       align: "center",
       render: (text, record, index) => {
         return (
@@ -111,18 +105,18 @@ const BukuBantuBelanja = () => {
       },
     },
     {
-      title: "Nominal SIPPP",
-      dataIndex: "nominal",
-      key: "nominal",
+      title: "Kredit",
+      dataIndex: "kredit",
+      key: "kredit",
       align: "right",
       render: (text, record, index) => {
         return <Space direction="vertical">{formatRupiah(text)}</Space>;
       },
     },
     {
-      title: "Nominal BANK",
-      dataIndex: "nominal",
-      key: "nominal",
+      title: "Total",
+      dataIndex: "total",
+      key: "total",
       align: "right",
       render: (text, record, index) => {
         return <Space direction="vertical">{formatRupiah(text)}</Space>;
@@ -144,6 +138,12 @@ const BukuBantuBelanja = () => {
       
 
       <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1  gap-2" >
+      <Radio.Group defaultValue="a" size="large">
+      <Radio.Button value="a">Periode</Radio.Button>
+      <Radio.Button value="b">Per-Tahun</Radio.Button>
+      <Radio.Button value="c">Per-Bulan</Radio.Button>
+    </Radio.Group>
+        
         <div class="bg-white rounded-lg">
           <div class="p-6">
             <h5 class="text-gray-900 text-xl leading-tight font-medium mb-2">
@@ -181,17 +181,7 @@ const BukuBantuBelanja = () => {
         </div>
         <div className="w-full px-2 md:w-2/6"></div>
       </div>
-            <p class="text-gray-900 text-2xl font-medium mb-2">
-              <b>
-                {" "}
-                {postrekon?.data === null
-                  ? formatRupiah(0)
-                  : formatRupiah(totalSaldo)}{" "}
-              </b>
-            </p>
-            <p class="text-gray-700 text-base mb-4">
-              {postrekon?.data?.length} Transaksi 
-            </p>
+            
           </div>
         </div>
         
@@ -208,16 +198,18 @@ const BukuBantuBelanja = () => {
       </h5>
 
       <div className="mt-5 p-5 bg-white rounded-lg">
-        <Tabs defaultActiveKey="1" type="card">
-          <TabPane
-            tab={
-              <span>
-                <EditOutlined />
-                <b> Baru</b>
-              </span>
-            }
-            key="1"
-          >
+      <div>
+              <Search
+                size="large"
+                placeholder="Cari..."
+                // onChange={(e) => onSearch(e.target.value)}
+                style={{
+                  width: 500,
+                }}
+              />
+            </div>
+        <div type="card">
+        
             <div
               style={{
                 padding: 5,
@@ -234,7 +226,7 @@ const BukuBantuBelanja = () => {
                 rowKey={"key"}
               />
             </div>
-          </TabPane>
+          
           {/* <TabPane
             tab={
               <span>
@@ -279,7 +271,7 @@ const BukuBantuBelanja = () => {
               <Tabel dataSource={postrekon?.data} columns={columns} rowKey={"key"} />
             </div>
           </TabPane> */}
-        </Tabs>
+        </div>
       </div>
       {/* <MessagePost
         visible={postrekon.status !== null ? true : false}
