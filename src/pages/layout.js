@@ -45,6 +45,8 @@ const BukuBantuBelanja = lazy(() =>
   import("../routes/firstroute/routeBukuBantuBelanja")
 );
 
+const PembukuanLazy = lazy(() => import("../../src/pages/pembukuan/bukubantubelanja")   )
+
 const RenderMenu = ({ content }) => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
@@ -160,6 +162,8 @@ const Layout = () => {
   const laporan = menu?.find((a) => a.nama_menu1 === "Laporan")?.menu2;
   const utilitas = menu?.find((a) => a.nama_menu1 === "Utilitas")?.menu2;
   const pembukuan = menu?.find((a) => a.nama_menu1 === "Pembukuan")?.menu2;
+
+
   const CekLoginBrowser = () => {
     return (
       <Modal visible={closeWindow} footer={false} closable={false}>
@@ -210,6 +214,18 @@ const Layout = () => {
                   <Suspense fallback={<div> Mohon Menunggu ... </div>}>
                     <BerandaNew />
                   </Suspense>
+                }
+              />
+              <Route
+                path="/pembukuan/*"
+                element={
+                  menu?.some((a) => a.nama_menu1 === "Pembukuan") === true ? (
+                    <Suspense fallback={<div> Mohon Menunggu ... </div>}>
+                      <PembukuanLazy />
+                    </Suspense>
+                  ) : (
+                    <p>Halaman Tidak Di Temukan Brosist!!</p>
+                  )
                 }
               />
               <Route
