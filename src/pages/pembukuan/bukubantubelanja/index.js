@@ -1,285 +1,383 @@
-import { Space, Tabs, Radio,Input} from "antd";
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setGlobalTitle } from "../../../store/global";
-import { DatePickers, Buttons, Tabel } from "../../../component";
 
-import {
-  SyncOutlined,
-  EditOutlined,
-  //CheckCircleOutlined,
-} from "@ant-design/icons";
-import { formatDate } from "../../../utils/format_tgl_indo";
-import { formatRupiah } from "../../../utils/formatRP";
+import { Table, Input, Radio, Select, DatePicker, Divider } from "antd";
+import React, { useEffect, useState } from "react";
+import { Buttons, DatePickers, Selects } from "../../../component";
 import { FONTSTYLE } from "../../../component/font";
-import { useState } from "react";
-import { postRekonsiliasi } from "../../../store/rekonsiliasi/action";
+import { SearchOutlined, FileExcelOutlined,SyncOutlined, FilePdfOutlined} from "@ant-design/icons";
+import { useDispatch } from "react-redux";
+import { setGlobalTitle } from "../../../store/global";
 
 const BukuBantuBelanja = () => {
-  const { Search } = Input;
-  const { TabPane } = Tabs;
-  const dispatch = useDispatch();
-  //postrekon
+    const { Search } = Input;
+    const { Option } = Select;
+    const [value, setValue] = useState();
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(setGlobalTitle("Buku Bantu Kas"));
+      }, [dispatch]);
 
-  const { postrekon } = useSelector((state) => state.reducerRekonsiliasi);
-
-  console.log("data rekon", postrekon?.data);
-
-  const [cekRekon, setCekRekon] = useState({
-    //kode_penyeimbang: "",
-    tanggal_awal: "0000-00-00",
-    tanggal_akhir: "0000-00-00",
-    nomor_rekening: "888801000157508",
-  });
-
-  useEffect(() => {
-    dispatch(setGlobalTitle("Buku Bantu Berlanja"));
-  }, [dispatch]);
-
-  // useEffect(() => {
-  //   if (postrekon?.status !== null) {
-  //     setTimeout(() => {
-  //       dispatch(clearPostRekon());
-  //     }, 2000);
-  //   }
-  //   // eslint-disable-next-line
-  // }, [postrekon.status]);
-
-  const onChange = (date, dateString) => {
-    setCekRekon({
-      ...cekRekon,
-      tanggal_awal: dateString[0],
-      tanggal_akhir: dateString[1],
-    });
-  };
-
-  let totalSaldo = 0;
-  postrekon?.data?.forEach(({ nominal }) => {
-    totalSaldo += parseInt(nominal);
-  });
-
-  const columns = [
-    {
-      title: "No",
-      align: "center",
-      dataIndex: "id_surat_tugas",
-      key: "id_surat_tugas",
-      width: 30,
-      render: (text, record, index) => {
-        return <Space direction="vertical">{index + 1}</Space>;
+      const onChange2 = (e) => {
+        setValue(e.target.value);
+      };
+    const colomntrans = [
+      {
+        title: "No",
+        dataIndex: "no",
+        key: "no",
+        width: 30,
       },
-    },
-    {
-      title: "Tanggal Transaksi",
-      dataIndex: "tanggal_transaksi",
-      key: "tanggal_transaksi",
-      render: (text, record, index) => {
-        return (
-          <Space direction="vertical">
-            <b> {formatDate(text)} </b>
-          </Space>
-        );
-      },
-    },
-   
-    {
-      title: "Deskripsi",
-      dataIndex: "keterangan",
-      key: "keterangan",
-      align: "left",
-      render: (text, record, index) => {
-        return <Space direction="vertical">{text}</Space>;
-      },
-    },
-    {
-      title: "Debit",
-      dataIndex: "debit",
-      key: "debit",
-      align: "center",
-      render: (text, record, index) => {
-        return (
-          <Space direction="vertical">
-            {record.Normalitas === "Aktiva" ? "Kredit" : "Debit"}
-          </Space>
-        );
-      },
-    },
-    {
-      title: "Kredit",
-      dataIndex: "kredit",
-      key: "kredit",
-      align: "right",
-      render: (text, record, index) => {
-        return <Space direction="vertical">{formatRupiah(text)}</Space>;
-      },
-    },
-    {
-      title: "Total",
-      dataIndex: "total",
-      key: "total",
-      align: "right",
-      render: (text, record, index) => {
-        return <Space direction="vertical">{formatRupiah(text)}</Space>;
-      },
-    },
-  ];
-
+        {
+          title: "Tanggal",
+          dataIndex: "tanggal_transaksi",
+          key: "tanggal_transaksi",
+        //   render: (text, record, index) => {
+        //     return (
+        //       <Space direction="vertical" size={0}>
+        //         <p>
+        //           {" "}
+        //           <Button
+        //             style={{ fontSize: 18 }}
+        //             type="link"
+        //             onClick={() => {
+        //               dispatch(jurnalByKode(record.kode_transaksi));
+        //               dispatch(jurnalByKodeRealisasi(record.realisasi));
+        //               dispatch(fetchKodeSurat(record.kode_surat))
+        //               setTimeout(() => {
+        //                 navigate("detailtrxjurnal/" + record.kode_surat);
+        //               }, 3000);
+                   
+                      
+        //             }}
+        //           >
+        //             <b>
+        //               {record.kode_transaksi} | {formatDate(text)} 
+        //             </b>
+        //           </Button>
+        //         </p>
+        //         <p> <b>  ( {record.keterangan} ) </b> </p>
+        //         <p className="tracking-wide">
+        //           {" "}
+        //           <Tag style={{ fontSize: 16, padding: 5, margin: 5 }} color="blue">
+        //             {" "}
+        //             {record.akun_aktiva}{" "}
+        //           </Tag>{" "}
+        //           {record.jurnal_aktiva}{" "}
+        //         </p>
+        //         <p className="tracking-wide">
+        //           {" "}
+        //           <Tag
+        //             style={{ fontSize: 16, padding: 5, margin: 5 }}
+        //             color="green"
+        //           >
+        //             {" "}
+        //             {record.akun_pasiva}{" "}
+        //           </Tag>{" "}
+        //           {record.jurnal_pasiva}{" "}
+        //         </p>
+        //       </Space>
+        //     );
+        //   },
+        },
+        // {
+        //   title: "Kode - Keterangan Transaksi",
+        //   dataIndex: "kode_transaksi",
+        //   key: "kode_transaksi",
+        //   render: (text, record, index) => {
+        //     return (
+        //       <Space direction="vertical" size={0}>
+        //         <p>
+        //           {" "}
+        //           <b>
+        //             {" "}
+        //             {text} - {record.keterangan}{" "}
+        //           </b>{" "}
+        //         </p>
+        //         <Tag color="blue">
+        //           {" "}
+        //           <a
+        //             href="#/"
+        //             onClick={() => {
+        //               navigate("detailtrxjurnal/");
+        //             }}
+        //           >
+        //             {" "}
+        //             Lihat Detail{" "}
+        //           </a>{" "}
+        //         </Tag>
+        //         <p> &nbsp; </p>
+        //       </Space>
+        //     );
+        //   },
+        // },
+        {
+            title: "Keterangan",
+            dataIndex: "keterangan",
+            key: "keterangan",
+        },
+    
+        {
+          title: "Debit",
+          dataIndex: "Aktiva",
+          key: "Aktiva",
+          align: "right",
+        //   render: (text, record, index) => {
+        //     return (
+        //       <Space direction="vertical" size={0}>
+        //         <p> &nbsp; </p>
+        //         <p> &nbsp; </p>
+        //         <p> {ribuan(text)} </p>
+        //         <p> {ribuan(0)} </p>
+        //       </Space>
+        //     );
+        //   },
+        },
+        {
+          title: "Kredit",
+          dataIndex: "Pasiva",
+          key: "Pasiva",
+          align: "right",
+        //   render: (text, record, index) => {
+        //     return (
+        //       <Space direction="vertical" size={0}>
+        //         <p> &nbsp; </p>
+        //         <p> &nbsp; </p>
+        //         <p> {ribuan(0)} </p>
+        //         <p> {ribuan(text)} </p>
+        //       </Space>
+        //     );
+        //   },
+        },
+        {
+            title: "Saldo",
+            dataIndex: "saldo",
+            key: "saldo",
+            align:"right"
+        }
+      ];
+      const pilkategori = (val) => {
+        // setdataPostSPTDTanggalJenis({
+        //   // ...dataPostSPTDTanggalJenis,
+        //   // jenis_surat: val,
+        // });
+      };
   return (
+    <div className="p-5 bg-white rounded-lg">
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          position: "sticky",
+          fontFamily: FONTSTYLE.PUBLICSANS,
+        }}
+      >
+    </div>
+    <div style={{display: "flex",justifyContent: "space-between",position: "sticky",}}>
+      <div>
+        <h5
+          style={{
+            marginBottom: 4,
+            fontWeight: "700",
+            fontSize: 16,
+            fontFamily: FONTSTYLE.PUBLICSANS,
+          }}
+        >
+          Daftar Transaksi
+        </h5>
+      </div>
+      <div className="flex gap-4">
+          <Buttons
+            labelButton={"Unduh PDF"}
+            backgroundColor={"maroon"}
+            color={"white"}
+            icon={<FilePdfOutlined />}
+            borderColor="white"
+            borderRadius={10}
+            //   onClick={handleDownload}
+            // onClick={() =>
+            //   exportToExcel(postsptd?.data, fields, headers, columnWidths)
+
+            // }
+          />
+          <Buttons
+            labelButton={"Unduh Excel"}
+            backgroundColor={"green"}
+            color={"white"}
+            icon={<FileExcelOutlined />}
+            borderColor="white"
+            borderRadius={10}
+            //   onClick={handleDownload}
+            // onClick={() =>
+            //   exportToExcel(postsptd?.data, fields, headers, columnWidths)
+
+            // }
+          />
+            {/* Render your Ant Design table component */}
+        </div>
+    </div>
+    <Divider/>
+    <div className="grid grid-cols-1 " style={{ fontFamily: FONTSTYLE.POPPINS }}>
+      <label className="block mb-1 text-md font-bold">
+        Pilih Kategori :
+      </label>
+        <Selects
+          style={{ height: 200 }}
+          marginBottom={10}
+          //onSearch={onSearch}
+          filterOption={(input, option) =>
+          option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0 || option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+          onChange={pilkategori}
+          //value={pilihanprov}
+          placeholder={"---Silahkan Pilih Kategori---"}
+          optionContent={
+            <>
+              <Option value={"kas"}> Buku Bantu Kas </Option>
+              <Option value={"belanja"}> Buku Bantu Belanja</Option>
+              <Option value={"pajak"}> Buku Bantu Pajak </Option>
+              <Option value={"hutang"}> Buku Bantu Hutang </Option>
+            </>
+          }
+        />
+    </div>
+    <div className="grid grid-cols-1 " style={{ fontFamily: FONTSTYLE.POPPINS }}>
+      <label className="block mb-1 text-md font-bold">
+        Pilih Berdasarkan :
+      </label>
+      <Radio.Group onChange={onChange2} value={value} >
+        <Radio value={1}>  Tanggal </Radio>
+        <Radio value={2}>  Bulan </Radio>
+        <Radio value={3}>  Tahun </Radio>
+      </Radio.Group>
+        {value === 1 ? (
+          <div style={{ display: "flex", marginRight: 10, marginTop:2, fontFamily: FONTSTYLE.POPPINS}}>
+            <label className="block text-gray-700 text-sm font-bold mb-2 mr-5">
+              Filter Berdasarkan Tanggal :
+            </label>
+            <DatePickers
+              picker={"date"}
+              format={"YYYY-MM-DD"}
+              // onChange={onChange}
+            />
+            <Buttons
+              labelButton={"Proses"}
+              borderColor={"#229CE1"}
+              backgroundColor={"#229CE1"}
+              color={"white"}
+              marginLeft={5}
+              icon={<SyncOutlined />}
+              // onClick={() => {
+              //   dispatch(postSPTDall(dataPostSPTDTanggal));
+              // }}
+            />
+            </div>
+        ) : value === 2 ? (
+          <div style={{display: "flex",marginRight: 10,marginBottom:2,marginTop:2,fontFamily: FONTSTYLE.POPPINS }}>
+            <label className="block text-gray-700 text-sm font-bold mb-2 mr-5">
+              Filter Berdasarkan Bulan :
+            </label>
+            <DatePicker
+              picker={"month"}
+              format={"MMMM"}
+              //   onChange={onChange}
+            />
+            <Buttons
+              labelButton={"Proses"}
+              borderColor={"#229CE1"}
+              backgroundColor={"#229CE1"}
+              color={"white"}
+              marginLeft={5}
+              icon={<SyncOutlined />}
+              //   onClick={() => {
+              //     dispatch(postSPTDUnit(dataPostSPTDTanggalUnit));
+              //   }}
+            />
+          </div>
+        ) : value === 3 ? (
+          <div style={{display: "flex", marginRight: 10, marginBottom:2, marginTop:2, fontFamily: FONTSTYLE.POPPINS, }}>
+            <label className="block text-gray-700 text-sm font-bold mb-2 mr-5">
+              Filter Berdasarkan Tahun :
+            </label>
+            <DatePicker
+              picker={"year"}
+              format={"YYYY"}
+              //   onChange={onChange}
+            />
+            <Buttons
+              labelButton={"Proses"}
+              borderColor={"#229CE1"}
+              backgroundColor={"#229CE1"}
+              color={"white"}
+              marginLeft={5}
+              icon={<SyncOutlined />}
+              //   onClick={() => {
+              //     dispatch(postSPTDJenis(dataPostSPTDTanggalJenis));
+              //   }}
+            />
+          </div>
+        ) : (
+            <p> </p>
+        )}
+        
+      </div>
     <div
       style={{
-        padding: 0,
+        padding: 5,
         zIndex: 0,
+        //overflowX: "auto",
         display: "flex",
         justifyContent: "center",
         flexDirection: "column",
         fontFamily: FONTSTYLE.POPPINS,
       }}
     >
-      
+      <Table
+        // dataSource={filterjurnal}
+        columns={colomntrans}
+        // pagination={{
+        //   defaultPageSize: 25,
+        //   showSizeChanger: true,
+        //   pageSizeOptions: ["25", "50", "75"],
+        // }}
+        // rowKey={"kode_transaksi"}
+        // summary={() => {
+        //   let totalAktiva = 0;
+        //   let totalPasiva = 0;
 
-      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1  gap-2" >
-      <Radio.Group defaultValue="a" size="large">
-      <Radio.Button value="a">Periode</Radio.Button>
-      <Radio.Button value="b">Per-Tahun</Radio.Button>
-      <Radio.Button value="c">Per-Bulan</Radio.Button>
-    </Radio.Group>
-        
-        <div class="bg-white rounded-lg">
-          <div class="p-6">
-            <h5 class="text-gray-900 text-xl leading-tight font-medium mb-2">
-              Input Periode
-            </h5>
-            <div className="flex flex-wrap -mx-2 space-y-6 md:space-y-0 mb-5">
-        
-        <div class="w-full md:w-1/6">
-          <div
-            style={{
-              display: "flex",
-              //alignItems: "center",
-              //justifyContent: "space-between",
-              width: 600,
-              marginRight: 10,
-            }}
-          >
-            <DatePickers
-              picker={"date"}
-              format={"YYYY-MM-DD"}
-              onChange={onChange}
-            />
-            <Buttons
-              labelButton={"Proses"}
-              borderColor={"#0B53B5"}
-              backgroundColor={"#0B53B5"}
-              color={"white"}
-              marginLeft={5}
-              icon={<SyncOutlined />}
-              onClick={() => {
-                dispatch(postRekonsiliasi(cekRekon));
-              }}
-            />
-          </div>
-        </div>
-        <div className="w-full px-2 md:w-2/6"></div>
-      </div>
-            
-          </div>
-        </div>
-        
-      </div>
-      <h5
-        style={{
-          marginTop: 10,
-          marginBottom: 20,
-          fontWeight: "700",
-          fontSize: 24,
-        }}
-      >
-        Riwayat Transaksi
-      </h5>
+        //   let total = [];
+        //   for (let a = 0; a < filterjurnal?.length; a++) {
+        //     let aktiva1 = filterjurnal[a]?.Aktiva;
+        //     let pasiva1 = filterjurnal[a]?.Pasiva;
+        //     total.push({
+        //       aktiva: aktiva1,
+        //       pasiva: pasiva1,
+        //     });
+        //   }
 
-      <div className="mt-5 p-5 bg-white rounded-lg">
-      <div>
-              <Search
-                size="large"
-                placeholder="Cari..."
-                // onChange={(e) => onSearch(e.target.value)}
-                style={{
-                  width: 500,
-                }}
-              />
-            </div>
-        <div type="card">
-        
-            <div
-              style={{
-                padding: 5,
-                zIndex: 0,
-                overflowX: "auto",
-                display: "flex",
-                justifyContent: "center",
-                flexDirection: "column",
-              }}
-            >
-              <Tabel
-                dataSource={postrekon?.data}
-                columns={columns}
-                rowKey={"key"}
-              />
-            </div>
-          
-          {/* <TabPane
-            tab={
-              <span>
-                <SyncOutlined />
-                <b> Proses </b>
-              </span>
-            }
-            key="2"
-          >
-            <div
-              style={{
-                padding: 5,
-                zIndex: 0,
-                overflowX: "auto",
-                display: "flex",
-                justifyContent: "center",
-                flexDirection: "column",
-              }}
-            >
-              <Tabel dataSource={postrekon?.data} columns={columns} rowKey={"key"} />
-            </div>
-          </TabPane>
-          <TabPane
-            tab={
-              <span>
-                <CheckCircleOutlined />
-                <b> Selesai </b>
-              </span>
-            }
-            key="3"
-          >
-            <div
-              style={{
-                padding: 5,
-                zIndex: 0,
-                overflowX: "auto",
-                display: "flex",
-                justifyContent: "center",
-                flexDirection: "column",
-              }}
-            >
-              <Tabel dataSource={postrekon?.data} columns={columns} rowKey={"key"} />
-            </div>
-          </TabPane> */}
-        </div>
-      </div>
-      {/* <MessagePost
-        visible={postrekon.status !== null ? true : false}
-        message={postrekon.message}
-        status={postrekon.status}
-      /> */}
+        //   total.forEach(({ aktiva }) => {
+        //     totalAktiva += parseInt(aktiva);
+        //   });
+        //   total.forEach(({ pasiva }) => {
+        //     totalPasiva += parseInt(pasiva);
+        //   });
+
+        //   return (
+        //     <>
+        //       <Table.Summary.Row>
+        //         <Table.Summary.Cell colSpan={1}>
+        //           {/* <b> Total {filterjurnal?.length} Transaksi </b> */}
+        //         </Table.Summary.Cell>
+        //         {/* <Table.Summary.Cell align="right">
+        //           <b> {ribuan(totalAktiva)} </b>
+        //         </Table.Summary.Cell>
+        //         <Table.Summary.Cell align="right">
+        //           <b> {ribuan(totalPasiva)} </b>
+        //         </Table.Summary.Cell> */}
+        //       </Table.Summary.Row>
+        //     </>
+        //   );
+        // }}
+      />
     </div>
-  );
-};
-
-export default BukuBantuBelanja;
+  </div>
+)
+}
+export default BukuBantuBelanja
