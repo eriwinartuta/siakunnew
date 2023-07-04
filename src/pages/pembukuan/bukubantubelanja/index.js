@@ -103,26 +103,20 @@ const BukuBantuBelanja = () => {
               
               val.bulan = bulan;
               val.tahun = year;
-              // Assign other properties to the `val` object if needed
             }
-            // val.tanggal_awal = selectedDate.format('YYYY-MM-DD');
-            // val.tanggal_akhir = selectedDate.format('YYYY-MM-DD');
-            // val.pengkelompokan = 'tanggal';
-            // val.bulan = selectedMonth.format('MM');
-            // val.tahun = selectedMonth.format('YYYY');
             break;
           case 2:
             val.tanggal_awal = selectedMonth.startOf('month').format('YYYY-MM-DD');
             val.tanggal_akhir = selectedMonth.endOf('month').format('YYYY-MM-DD');
             val.pengkelompokan = 'bulan';
             val.bulan = selectedMonth.format('MM');
-            val.tahun = selectedMonth.format('YYYY');
+            val.tahun = year;
             break;
           case 3:
             val.tanggal_awal = selectedYear.startOf('year').format('YYYY-MM-DD');
             val.tanggal_akhir = selectedYear.endOf('year').format('YYYY-MM-DD');
             val.pengkelompokan = 'tahun';
-            val.bulan = selectedYear.format('MM');
+            val.bulan = bulan;
             val.tahun = selectedYear.format('YYYY');
             break;
           default:
@@ -160,6 +154,7 @@ const BukuBantuBelanja = () => {
           title: "Tanggal",
           dataIndex: "tanggal_transaksi",
           key: "tanggal_transaksi",
+          width: 150,
           render: (text, record) => <div>{formatDate(text)}</div>
         
         },
@@ -198,11 +193,10 @@ const BukuBantuBelanja = () => {
           dataIndex: "Aktiva",
           key: "Aktiva",
           align: "right",
+          width:200,
           render: (text, record, index) => {
             return (
               <Space direction="vertical" size={0}>
-                <p> &nbsp; </p>
-                <p> &nbsp; </p>
                 <p> {ribuan(text)} </p>
                 <p> {ribuan(0)} </p>
               </Space>
@@ -214,11 +208,10 @@ const BukuBantuBelanja = () => {
           dataIndex: "Pasiva",
           key: "Pasiva",
           align: "right",
+          width:200,
           render: (text, record, index) => {
             return (
               <Space direction="vertical" size={0}>
-                <p> &nbsp; </p>
-                <p> &nbsp; </p>
                 <p> {ribuan(0)} </p>
                 <p> {ribuan(text)} </p>
               </Space>
