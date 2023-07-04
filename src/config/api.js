@@ -9,6 +9,7 @@ export const EBUDGETING_APP = "https://be2.ut.ac.id/ebudget/auth"
 // export const BASE_URL_AKUN_INTERNAL = "https://103.147.3.189:4042/siakun/internal" 
 
 export const BASE_URL_AKUN_INTERNAL = "https://be1.ut.ac.id/siakun/internal"
+export const URL_SIAKUN = "https://asset.ut.ac.id/siakun";
 
 export const REF_BANK = "https://be2.ut.ac.id/hrd/bank"
 
@@ -125,4 +126,7 @@ export const BASE_PATH_MASTER_JURNAL = {
 
 export const BASE_PATH_REKONSILIASI = {
     POST_REKON : "/rekonsiliasi/selection-pertanggal"
+}
+export const BASE_PATH_KARTU = {
+list_kartu : "/apiv1/pagu-jurnal/list-kas-jurnal"
 }

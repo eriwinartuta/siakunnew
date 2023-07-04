@@ -1,165 +1,232 @@
 
-import { Table, Input, Radio, Select, DatePicker, Divider } from "antd";
+import { Table, Input, Radio, Select, DatePicker, Divider, Space, Button, Tag } from "antd";
 import React, { useEffect, useState } from "react";
 import { Buttons, DatePickers, Selects } from "../../../component";
 import { FONTSTYLE } from "../../../component/font";
-import { SearchOutlined, FileExcelOutlined,SyncOutlined, FilePdfOutlined} from "@ant-design/icons";
+import {  FileExcelOutlined,SyncOutlined, FilePdfOutlined} from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import { setGlobalTitle } from "../../../store/global";
+import { BASE_PATH_KARTU, EXPENDITURE_APP, URL_SIAKUN } from "../../../config/api";
+import axios from "axios";
+import ribuan from "../../../utils/formatribu";
+import { useNavigate } from "react-router-dom";
+import { formatDate } from "../../../utils/format_tgl_indo";
+import moment from "moment";
 
 const BukuBantuBelanja = () => {
     const { Search } = Input;
     const { Option } = Select;
-    const [value, setValue] = useState();
+    const [data, setData] = useState([]);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const [selectedCategory, setSelectedCategory] = useState('');
+    const [selectedOption, setSelectedOption] = useState(null);
+    const [selectedDate, setSelectedDate] = useState(null);
+    const [selectedMonth, setSelectedMonth] = useState(null);
+    const [selectedYear, setSelectedYear] = useState(null);
+    const val = {};
+    console.log("data", data);
+    const bulan = new Date().getMonth() + 1;
+    // ==================================================== //
+    const dateObj = new Date();
+    const month = dateObj.getUTCMonth() + 1;
+    const day = dateObj.getUTCDate();
+    const year = dateObj.getUTCFullYear();
+    const newdate = year + "-" + month + "-" + day;
+    // ==================================================== //
     useEffect(() => {
         dispatch(setGlobalTitle("Buku Bantu Kas"));
       }, [dispatch]);
-
-      const onChange2 = (e) => {
-        setValue(e.target.value);
+      const cekJadwal = async (val) => {
+        const data = {
+          tanggal_awal: val.tanggal_awal,
+          tanggal_akhir: val.tanggal_akhir,
+          pengkelompokan: val.pengkelompokan,
+          bulan: val.bulan,
+          tahun: val.tahun,
+          akun_coa: val.akun_coa,
+          kode_unit: val.kode_unit,
+        };
+    
+        const o = {
+          url: URL_SIAKUN + BASE_PATH_KARTU.list_kartu,
+          data: data,
+        };
+    
+        try {
+          const response = await axios.post(o.url, data);
+          return response.data;
+        } catch (error) {
+          console.error('Error fetching data:', error);
+          throw error;
+        }
       };
+    
+      const pilkategori = (value) => {
+        setSelectedCategory(value);
+      };
+    
+      const onChangeOption = (e) => {
+        setSelectedOption(e.target.value);
+      };
+    
+      const onChangeDate = (date) => {
+        setSelectedDate(date);
+      };
+    
+      const onChangeMonth = (date) => {
+        setSelectedMonth(date);
+      };
+    
+      const onChangeYear = (date) => {
+        setSelectedYear(date);
+      };
+    
+      const handleProsesClick = async () => {
+        let val = {
+          tanggal_awal: '',
+          tanggal_akhir: '',
+          pengkelompokan: '',
+          bulan: '',
+          tahun: '',
+          akun_coa: '',
+          kode_unit: '',
+            };
+            console.log("ll", val);
+        switch (selectedOption) {
+          case 1:
+            if (selectedDate && selectedDate.length === 2) {
+              const [startDate, endDate] = selectedDate;
+              val.tanggal_awal = moment(startDate).format('YYYY-MM-DD');
+              val.tanggal_akhir = moment(endDate).format('YYYY-MM-DD');
+              val.pengkelompokan = 'tanggal';
+              
+              val.bulan = bulan;
+              val.tahun = year;
+              // Assign other properties to the `val` object if needed
+            }
+            // val.tanggal_awal = selectedDate.format('YYYY-MM-DD');
+            // val.tanggal_akhir = selectedDate.format('YYYY-MM-DD');
+            // val.pengkelompokan = 'tanggal';
+            // val.bulan = selectedMonth.format('MM');
+            // val.tahun = selectedMonth.format('YYYY');
+            break;
+          case 2:
+            val.tanggal_awal = selectedMonth.startOf('month').format('YYYY-MM-DD');
+            val.tanggal_akhir = selectedMonth.endOf('month').format('YYYY-MM-DD');
+            val.pengkelompokan = 'bulan';
+            val.bulan = selectedMonth.format('MM');
+            val.tahun = selectedMonth.format('YYYY');
+            break;
+          case 3:
+            val.tanggal_awal = selectedYear.startOf('year').format('YYYY-MM-DD');
+            val.tanggal_akhir = selectedYear.endOf('year').format('YYYY-MM-DD');
+            val.pengkelompokan = 'tahun';
+            val.bulan = selectedYear.format('MM');
+            val.tahun = selectedYear.format('YYYY');
+            break;
+          default:
+            break;
+        }
+    
+        val.akun_coa = selectedCategory;
+        val.kode_unit = '';
+    
+        try {
+          const data = await cekJadwal(val);
+          // Handle the returned data as needed
+          setData(data.data)
+          console.log(data);
+        } catch (error) {
+          // Handle the error
+          console.error(error);
+        }
+      };
+    
+
     const colomntrans = [
       {
-        title: "No",
-        dataIndex: "no",
-        key: "no",
-        width: 30,
+        title: 'No',
+        dataIndex: 'index',
+        key: 'index',
+        width:70,
+        render: (_, record, index) => {
+            return (
+                <p className='m-0'>{index + 1}</p>
+            )
+        }
       },
         {
           title: "Tanggal",
           dataIndex: "tanggal_transaksi",
           key: "tanggal_transaksi",
-        //   render: (text, record, index) => {
-        //     return (
-        //       <Space direction="vertical" size={0}>
-        //         <p>
-        //           {" "}
-        //           <Button
-        //             style={{ fontSize: 18 }}
-        //             type="link"
-        //             onClick={() => {
-        //               dispatch(jurnalByKode(record.kode_transaksi));
-        //               dispatch(jurnalByKodeRealisasi(record.realisasi));
-        //               dispatch(fetchKodeSurat(record.kode_surat))
-        //               setTimeout(() => {
-        //                 navigate("detailtrxjurnal/" + record.kode_surat);
-        //               }, 3000);
-                   
-                      
-        //             }}
-        //           >
-        //             <b>
-        //               {record.kode_transaksi} | {formatDate(text)} 
-        //             </b>
-        //           </Button>
-        //         </p>
-        //         <p> <b>  ( {record.keterangan} ) </b> </p>
-        //         <p className="tracking-wide">
-        //           {" "}
-        //           <Tag style={{ fontSize: 16, padding: 5, margin: 5 }} color="blue">
-        //             {" "}
-        //             {record.akun_aktiva}{" "}
-        //           </Tag>{" "}
-        //           {record.jurnal_aktiva}{" "}
-        //         </p>
-        //         <p className="tracking-wide">
-        //           {" "}
-        //           <Tag
-        //             style={{ fontSize: 16, padding: 5, margin: 5 }}
-        //             color="green"
-        //           >
-        //             {" "}
-        //             {record.akun_pasiva}{" "}
-        //           </Tag>{" "}
-        //           {record.jurnal_pasiva}{" "}
-        //         </p>
-        //       </Space>
-        //     );
-        //   },
+          render: (text, record) => <div>{formatDate(text)}</div>
+        
         },
-        // {
-        //   title: "Kode - Keterangan Transaksi",
-        //   dataIndex: "kode_transaksi",
-        //   key: "kode_transaksi",
-        //   render: (text, record, index) => {
-        //     return (
-        //       <Space direction="vertical" size={0}>
-        //         <p>
-        //           {" "}
-        //           <b>
-        //             {" "}
-        //             {text} - {record.keterangan}{" "}
-        //           </b>{" "}
-        //         </p>
-        //         <Tag color="blue">
-        //           {" "}
-        //           <a
-        //             href="#/"
-        //             onClick={() => {
-        //               navigate("detailtrxjurnal/");
-        //             }}
-        //           >
-        //             {" "}
-        //             Lihat Detail{" "}
-        //           </a>{" "}
-        //         </Tag>
-        //         <p> &nbsp; </p>
-        //       </Space>
-        //     );
-        //   },
-        // },
         {
-            title: "Keterangan",
-            dataIndex: "keterangan",
-            key: "keterangan",
+          title: " Keterangan ",
+          dataIndex: "keterangan",
+          key: "keterangan",
+          // render: (text, record, index) => {
+          //   return (
+          //     <Space direction="vertical" size={0}>
+          //      <p className="tracking-wide">
+          //         {" "}
+          //         <Tag style={{ fontSize: 16, padding: 5, margin: 5 }} color="blue">
+          //           {" "}
+          //           {record.akun_aktiva}{" "}
+          //         </Tag>{" "}
+          //         {record.jurnal_aktiva}{" "}
+          //       </p>
+          //       <p className="tracking-wide">
+          //         {" "}
+          //         <Tag
+          //           style={{ fontSize: 16, padding: 5, margin: 5 }}
+          //           color="green"
+          //         >
+          //           {" "}
+          //           {record.akun_pasiva}{" "}
+          //         </Tag>{" "}
+          //         {record.jurnal_pasiva}{" "}
+          //       </p>
+          //     </Space>
+          //   );
+          // },
         },
-    
         {
-          title: "Debit",
+          title: "Debit (Rp.)",
           dataIndex: "Aktiva",
           key: "Aktiva",
           align: "right",
-        //   render: (text, record, index) => {
-        //     return (
-        //       <Space direction="vertical" size={0}>
-        //         <p> &nbsp; </p>
-        //         <p> &nbsp; </p>
-        //         <p> {ribuan(text)} </p>
-        //         <p> {ribuan(0)} </p>
-        //       </Space>
-        //     );
-        //   },
+          render: (text, record, index) => {
+            return (
+              <Space direction="vertical" size={0}>
+                <p> &nbsp; </p>
+                <p> &nbsp; </p>
+                <p> {ribuan(text)} </p>
+                <p> {ribuan(0)} </p>
+              </Space>
+            );
+          },
         },
         {
-          title: "Kredit",
+          title: "Kredit (Rp.)",
           dataIndex: "Pasiva",
           key: "Pasiva",
           align: "right",
-        //   render: (text, record, index) => {
-        //     return (
-        //       <Space direction="vertical" size={0}>
-        //         <p> &nbsp; </p>
-        //         <p> &nbsp; </p>
-        //         <p> {ribuan(0)} </p>
-        //         <p> {ribuan(text)} </p>
-        //       </Space>
-        //     );
-        //   },
+          render: (text, record, index) => {
+            return (
+              <Space direction="vertical" size={0}>
+                <p> &nbsp; </p>
+                <p> &nbsp; </p>
+                <p> {ribuan(0)} </p>
+                <p> {ribuan(text)} </p>
+              </Space>
+            );
+          },
         },
-        {
-            title: "Saldo",
-            dataIndex: "saldo",
-            key: "saldo",
-            align:"right"
-        }
+       
       ];
-      const pilkategori = (val) => {
-        // setdataPostSPTDTanggalJenis({
-        //   // ...dataPostSPTDTanggalJenis,
-        //   // jenis_surat: val,
-        // });
-      };
   return (
     <div className="p-5 bg-white rounded-lg">
       <div
@@ -215,109 +282,90 @@ const BukuBantuBelanja = () => {
         </div>
     </div>
     <Divider/>
-    <div className="grid grid-cols-1 " style={{ fontFamily: FONTSTYLE.POPPINS }}>
-      <label className="block mb-1 text-md font-bold">
-        Pilih Kategori :
-      </label>
+
+    <div>
+      <div className="grid grid-cols-1" style={{ fontFamily: FONTSTYLE.POPPINS }}>
+        <label className="block mb-1 text-md font-bold">Pilih Kategori:</label>
         <Selects
           style={{ height: 200 }}
           marginBottom={10}
-          //onSearch={onSearch}
           filterOption={(input, option) =>
-          option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0 || option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+            option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0 ||
+            option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
           onChange={pilkategori}
-          //value={pilihanprov}
-          placeholder={"---Silahkan Pilih Kategori---"}
+          placeholder={'---Silahkan Pilih Kategori---'}
           optionContent={
             <>
-              <Option value={"kas"}> Buku Bantu Kas </Option>
-              <Option value={"belanja"}> Buku Bantu Belanja</Option>
-              <Option value={"pajak"}> Buku Bantu Pajak </Option>
-              <Option value={"hutang"}> Buku Bantu Hutang </Option>
+              <Option value={110101010100}>Buku Bantu Kas</Option>
+              <Option value={'belanja'}>Buku Bantu Belanja</Option>
+              <Option value={'pajak'}>Buku Bantu Pajak</Option>
+              <Option value={2}>Buku Bantu Hutang</Option>
             </>
           }
         />
-    </div>
-    <div className="grid grid-cols-1 " style={{ fontFamily: FONTSTYLE.POPPINS }}>
-      <label className="block mb-1 text-md font-bold">
-        Pilih Berdasarkan :
-      </label>
-      <Radio.Group onChange={onChange2} value={value} >
-        <Radio value={1}>  Tanggal </Radio>
-        <Radio value={2}>  Bulan </Radio>
-        <Radio value={3}>  Tahun </Radio>
-      </Radio.Group>
-        {value === 1 ? (
-          <div style={{ display: "flex", marginRight: 10, marginTop:2, fontFamily: FONTSTYLE.POPPINS}}>
-            <label className="block text-gray-700 text-sm font-bold mb-2 mr-5">
-              Filter Berdasarkan Tanggal :
-            </label>
-            <DatePickers
-              picker={"date"}
-              format={"YYYY-MM-DD"}
-              // onChange={onChange}
-            />
+      </div>
+
+      <div className="grid grid-cols-1" style={{ fontFamily: FONTSTYLE.POPPINS }}>
+        <label className="block mb-1 text-md font-bold">Pilih Berdasarkan:</label>
+        <Radio.Group onChange={onChangeOption} value={selectedOption}>
+          <Radio value={1}>Tanggal</Radio>
+          <Radio value={2}>Bulan</Radio>
+          <Radio value={3}>Tahun</Radio>
+        </Radio.Group>
+
+        {selectedOption === 1 ? (
+          <div style={{ display: 'flex', marginRight: 10, marginTop: 2, fontFamily: FONTSTYLE.POPPINS }}>
+            <label className="block text-gray-700 text-sm font-bold mb-2 mr-5">Filter Berdasarkan Tanggal:</label>
+            <DatePicker.RangePicker format={'YYYY-MM-DD'} onChange={onChangeDate} />
             <Buttons
-              labelButton={"Proses"}
-              borderColor={"#229CE1"}
-              backgroundColor={"#229CE1"}
-              color={"white"}
+              labelButton={'Proses'}
+              borderColor={'#229CE1'}
+              backgroundColor={'#229CE1'}
+              color={'white'}
               marginLeft={5}
               icon={<SyncOutlined />}
-              // onClick={() => {
-              //   dispatch(postSPTDall(dataPostSPTDTanggal));
-              // }}
-            />
-            </div>
-        ) : value === 2 ? (
-          <div style={{display: "flex",marginRight: 10,marginBottom:2,marginTop:2,fontFamily: FONTSTYLE.POPPINS }}>
-            <label className="block text-gray-700 text-sm font-bold mb-2 mr-5">
-              Filter Berdasarkan Bulan :
-            </label>
-            <DatePicker
-              picker={"month"}
-              format={"MMMM"}
-              //   onChange={onChange}
-            />
-            <Buttons
-              labelButton={"Proses"}
-              borderColor={"#229CE1"}
-              backgroundColor={"#229CE1"}
-              color={"white"}
-              marginLeft={5}
-              icon={<SyncOutlined />}
-              //   onClick={() => {
-              //     dispatch(postSPTDUnit(dataPostSPTDTanggalUnit));
-              //   }}
+              onClick={handleProsesClick}
             />
           </div>
-        ) : value === 3 ? (
-          <div style={{display: "flex", marginRight: 10, marginBottom:2, marginTop:2, fontFamily: FONTSTYLE.POPPINS, }}>
-            <label className="block text-gray-700 text-sm font-bold mb-2 mr-5">
-              Filter Berdasarkan Tahun :
-            </label>
-            <DatePicker
-              picker={"year"}
-              format={"YYYY"}
-              //   onChange={onChange}
-            />
+        ) : selectedOption === 2 ? (
+          <div style={{ display: 'flex', marginRight: 10, marginBottom: 2, marginTop: 2, fontFamily: FONTSTYLE.POPPINS }}>
+            <label className="block text-gray-700 text-sm font-bold mb-2 mr-5">Filter Berdasarkan Bulan:</label>
+            <DatePicker picker={'month'} format={'MMMM'} onChange={onChangeMonth} />
+
             <Buttons
-              labelButton={"Proses"}
-              borderColor={"#229CE1"}
-              backgroundColor={"#229CE1"}
-              color={"white"}
+              labelButton={'Proses'}
+              borderColor={'#229CE1'}
+              backgroundColor={'#229CE1'}
+              color={'white'}
               marginLeft={5}
               icon={<SyncOutlined />}
-              //   onClick={() => {
-              //     dispatch(postSPTDJenis(dataPostSPTDTanggalJenis));
-              //   }}
+              onClick={handleProsesClick}
+            />
+          </div>
+        ) : selectedOption === 3 ? (
+          <div style={{ display: 'flex', marginRight: 10, marginBottom: 2, marginTop: 2, fontFamily: FONTSTYLE.POPPINS }}>
+            <label className="block text-gray-700 text-sm font-bold mb-2 mr-5">Filter Berdasarkan Tahun:</label>
+            <DatePicker picker={'year'} format={'YYYY'} onChange={onChangeYear} />
+
+            <Buttons
+              labelButton={'Proses'}
+              borderColor={'#229CE1'}
+              backgroundColor={'#229CE1'}
+              color={'white'}
+              marginLeft={5}
+              icon={<SyncOutlined />}
+              onClick={handleProsesClick}
             />
           </div>
         ) : (
-            <p> </p>
+          <p></p>
         )}
-        
       </div>
+    </div>
+  
+
+    
     <div
       style={{
         padding: 5,
@@ -330,51 +378,8 @@ const BukuBantuBelanja = () => {
       }}
     >
       <Table
-        // dataSource={filterjurnal}
-        columns={colomntrans}
-        // pagination={{
-        //   defaultPageSize: 25,
-        //   showSizeChanger: true,
-        //   pageSizeOptions: ["25", "50", "75"],
-        // }}
-        // rowKey={"kode_transaksi"}
-        // summary={() => {
-        //   let totalAktiva = 0;
-        //   let totalPasiva = 0;
-
-        //   let total = [];
-        //   for (let a = 0; a < filterjurnal?.length; a++) {
-        //     let aktiva1 = filterjurnal[a]?.Aktiva;
-        //     let pasiva1 = filterjurnal[a]?.Pasiva;
-        //     total.push({
-        //       aktiva: aktiva1,
-        //       pasiva: pasiva1,
-        //     });
-        //   }
-
-        //   total.forEach(({ aktiva }) => {
-        //     totalAktiva += parseInt(aktiva);
-        //   });
-        //   total.forEach(({ pasiva }) => {
-        //     totalPasiva += parseInt(pasiva);
-        //   });
-
-        //   return (
-        //     <>
-        //       <Table.Summary.Row>
-        //         <Table.Summary.Cell colSpan={1}>
-        //           {/* <b> Total {filterjurnal?.length} Transaksi </b> */}
-        //         </Table.Summary.Cell>
-        //         {/* <Table.Summary.Cell align="right">
-        //           <b> {ribuan(totalAktiva)} </b>
-        //         </Table.Summary.Cell>
-        //         <Table.Summary.Cell align="right">
-        //           <b> {ribuan(totalPasiva)} </b>
-        //         </Table.Summary.Cell> */}
-        //       </Table.Summary.Row>
-        //     </>
-        //   );
-        // }}
+        dataSource={data}
+        columns={colomntrans} bordered pagination={{ pageSize: 50 }} scroll={{ y: 2000 }}
       />
     </div>
   </div>
