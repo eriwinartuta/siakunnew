@@ -8,6 +8,7 @@ import {
   Space,
   Button,
   Tag,
+  notification,
 } from "antd";
 import React, { useEffect, useState } from "react";
 import { Buttons, DatePickers, Selects } from "../../../component";
@@ -15,13 +16,16 @@ import { FONTSTYLE } from "../../../component/font";
 import {
   FileExcelOutlined,
   SyncOutlined,
-  FilePdfOutlined,
+  FilePdfOutlined,ReloadOutlined
 } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import { setGlobalTitle } from "../../../store/global";
 import {
   BASE_PATH_KARTU,
+  BASE_PATH_PANUTAN,
   EXPENDITURE_APP,
+  UNITPANUTAN,
+  URL_PANUTAN,
   URL_SIAKUN,
 } from "../../../config/api";
 import axios from "axios";
@@ -30,131 +34,173 @@ import { useNavigate } from "react-router-dom";
 import { formatDate } from "../../../utils/format_tgl_indo";
 import moment from "moment";
 import DokumenPdf from "./DokumenPdf";
+import { formatRupiah } from "../../../utils/formatRP";
 
 const BukuBantuBelanja = () => {
-  const { Search } = Input;
-  const { Option } = Select;
-  const [data, setData] = useState([]);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedOption, setSelectedOption] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedMonth, setSelectedMonth] = useState(null);
-  const [selectedYear, setSelectedYear] = useState(null);
-  const val = {};
-  console.log("data", data);
-  const bulan = new Date().getMonth() + 1;
-  // ==================================================== //
-  const dateObj = new Date();
-  const month = dateObj.getUTCMonth() + 1;
-  const day = dateObj.getUTCDate();
-  const year = dateObj.getUTCFullYear();
-  const newdate = year + "-" + month + "-" + day;
-  // ==================================================== //
-  useEffect(() => {
-    dispatch(setGlobalTitle("Buku Bantu Kas"));
-  }, [dispatch]);
-  const cekJadwal = async (val) => {
-    const data = {
-      tanggal_awal: val.tanggal_awal,
-      tanggal_akhir: val.tanggal_akhir,
-      pengkelompokan: val.pengkelompokan,
-      bulan: val.bulan,
-      tahun: val.tahun,
-      akun_coa: val.akun_coa,
-      kode_unit: val.kode_unit,
-    };
+    const { Search } = Input;
+    const { Option } = Select;
+    const [data, setData] = useState([]);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const [dataUnit, setDataUnit] = useState(null);
+    const [selectedCategory, setSelectedCategory] = useState('');
+    const [selectedOption, setSelectedOption] = useState(null);
+    const [selectedDate, setSelectedDate] = useState(null);
+    const [selectedMonth, setSelectedMonth] = useState(null);
+    const [selectedYear, setSelectedYear] = useState(null);
+    const val = {};
+    console.log("data", dataUnit);
+    const bulan = (new Date().getMonth() + 1).toString().padStart(2, '0');
+    // ==================================================== //
+    const dateObj = new Date();
+    const month = dateObj.getUTCMonth() + 1;
+    const day = dateObj.getUTCDate();
+    const year = dateObj.getUTCFullYear();
+    const newdate = year + "-" + month + "-" + day;
+    // ==================================================== //
+    useEffect(() => {
+      getUnit();
+        dispatch(setGlobalTitle("Buku Bantu"));
+      }, [dispatch]);
 
-    const o = {
-      url: URL_SIAKUN + BASE_PATH_KARTU.list_kartu,
-      data: data,
-    };
-
-    try {
-      const response = await axios.post(o.url, data);
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      throw error;
-    }
-  };
-
-  const pilkategori = (value) => {
-    setSelectedCategory(value);
-  };
-
-  const onChangeOption = (e) => {
-    setSelectedOption(e.target.value);
-  };
-
-  const onChangeDate = (date) => {
-    setSelectedDate(date);
-  };
-
-  const onChangeMonth = (date) => {
-    setSelectedMonth(date);
-  };
-
-  const onChangeYear = (date) => {
-    setSelectedYear(date);
-  };
-
-  const handleProsesClick = async () => {
-    let val = {
-      tanggal_awal: "",
-      tanggal_akhir: "",
-      pengkelompokan: "",
-      bulan: "",
-      tahun: "",
-      akun_coa: "",
-      kode_unit: "",
-    };
-    console.log("ll", val);
-    switch (selectedOption) {
-      case 1:
-        if (selectedDate && selectedDate.length === 2) {
-          const [startDate, endDate] = selectedDate;
-          val.tanggal_awal = moment(startDate).format("YYYY-MM-DD");
-          val.tanggal_akhir = moment(endDate).format("YYYY-MM-DD");
-          val.pengkelompokan = "tanggal";
-
-          val.bulan = bulan;
-          val.tahun = year;
+      const getUnit = () => {
+        axios.get(URL_PANUTAN + BASE_PATH_PANUTAN.get_unit)
+          .then((data) => {
+            const response = data.data;
+            console.log("unit", response);
+            if (response?.length > 0) {
+              setDataUnit(response);
+            } else {
+              notification.error({
+                description: "Data Klasifikasi Tidak di temukan",
+                key: 12,
+              });
+            }
+          })
+          .catch((err) => {
+            notification.error({
+              description: err,
+              key: 14,
+            });
+          });
+      };
+      const cekJadwal = async (val) => {
+        const data = {
+          tanggal_awal: val.tanggal_awal,
+          tanggal_akhir: val.tanggal_akhir,
+          pengkelompokan: val.pengkelompokan,
+          bulan: val.bulan,
+          tahun: val.tahun,
+          akun_coa: val.akun_coa,
+          kode_unit: val.kode_unit,
+        };
+    
+        const o = {
+          
+          url: URL_SIAKUN + BASE_PATH_KARTU.list_kartu_nocontra,
+          data: data,
+        };
+        let loading = false;
+        try {
+          loading = true;
+          const response = await axios.post(o.url, data);
+          loading = false;
+          return response.data;
+        } catch (error) {
+          loading = false;
+          console.error('Error fetching data:', error);
+          throw error;
         }
-        break;
-      case 2:
-        val.tanggal_awal = selectedMonth.startOf("month").format("YYYY-MM-DD");
-        val.tanggal_akhir = selectedMonth.endOf("month").format("YYYY-MM-DD");
-        val.pengkelompokan = "bulan";
-        val.bulan = selectedMonth.format("MM");
-        val.tahun = year;
-        break;
-      case 3:
-        val.tanggal_awal = selectedYear.startOf("year").format("YYYY-MM-DD");
-        val.tanggal_akhir = selectedYear.endOf("year").format("YYYY-MM-DD");
-        val.pengkelompokan = "tahun";
-        val.bulan = bulan;
-        val.tahun = selectedYear.format("YYYY");
-        break;
-      default:
-        break;
-    }
-
-    val.akun_coa = selectedCategory;
-    val.kode_unit = "";
-
-    try {
-      const data = await cekJadwal(val);
-      // Handle the returned data as needed
-      setData(data.data);
-      console.log(data);
-    } catch (error) {
-      // Handle the error
-      console.error(error);
-    }
-  };
-
+      };
+      const pilunit = (value) => {
+        setDataUnit(value);
+      };
+      const pilkategori = (value) => {
+        setSelectedCategory(value);
+      };
+    
+      const onChangeOption = (e) => {
+        setSelectedOption(e.target.value);
+      };
+    
+      const onChangeDate = (date) => {
+        setSelectedDate(date);
+      };
+    
+      const onChangeMonth = (date) => {
+        setSelectedMonth(date);
+      };
+    
+      const onChangeYear = (date) => {
+        setSelectedYear(date);
+      };
+      const handleResetClick = () => {
+        // setData([]);
+        // setDataUnit(null); 
+        // setSelectedCategory('');
+        // setSelectedOption(null); 
+        // setSelectedDate(null); 
+        // setSelectedMonth(null); 
+        // setSelectedYear(null); 
+        window.location.reload();
+      };
+      
+      const handleProsesClick = async () => {
+        let val = {
+          tanggal_awal: '',
+          tanggal_akhir: '',
+          pengkelompokan: '',
+          bulan: '',
+          tahun: '',
+          akun_coa: '',
+          kode_unit: '',
+            };
+            console.log("ll", val);
+        switch (selectedOption) {
+          case 1:
+            if (selectedDate && selectedDate.length === 2) {
+              const [startDate, endDate] = selectedDate;
+              val.tanggal_awal = moment(startDate).format('YYYY-MM-DD');
+              val.tanggal_akhir = moment(endDate).format('YYYY-MM-DD');
+              val.pengkelompokan = 'tanggal';
+              
+              val.bulan = bulan.toString();
+              val.tahun = year.toString();
+            }
+            break;
+          case 2:
+            val.tanggal_awal = selectedMonth.startOf('month').format('YYYY-MM-DD');
+            val.tanggal_akhir = selectedMonth.endOf('month').format('YYYY-MM-DD');
+            val.pengkelompokan = 'bulan';
+            val.bulan = selectedMonth.format('MM');
+            val.tahun = year.toString();
+            break;
+          case 3:
+            val.tanggal_awal = selectedYear.startOf('year').format('YYYY-MM-DD');
+            val.tanggal_akhir = selectedYear.endOf('year').format('YYYY-MM-DD');
+            val.pengkelompokan = 'tahun';
+            val.bulan = bulan.toString();
+            val.tahun = selectedYear.format('YYYY');
+            break;
+          default:
+            break;
+        }
+    
+        val.akun_coa = selectedCategory;
+        // val.kode_unit = dataUnit || "";
+        val.kode_unit = dataUnit;
+    
+        try {
+          const data = await cekJadwal(val);
+          // Handle the returned data as needed
+          setData(data.data)
+          console.log(data);
+        } catch (error) {
+          // Handle the error
+          console.error(error);
+        }
+      };
+  
   const colomntrans = [
     {
       title: "No",
@@ -166,72 +212,51 @@ const BukuBantuBelanja = () => {
       },
     },
     {
+      title: "Unit",
+      dataIndex: "nama_unit",
+      key: "nama_unit",
+    },
+    {
       title: "Tanggal",
       dataIndex: "tanggal_transaksi",
       key: "tanggal_transaksi",
       width: 150,
-      render: (text, record) => <div>{formatDate(text)}</div>,
+      sorter: (a, b) => new Date(a.tanggal_transaksi).getTime() - new Date(b.tanggal_transaksi).getTime(),
+      render: (text, record) => <div>{formatDate(text)}</div>
     },
     {
       title: " Keterangan ",
       dataIndex: "keterangan",
       key: "keterangan",
-      // render: (text, record, index) => {
-      //   return (
-      //     <Space direction="vertical" size={0}>
-      //      <p className="tracking-wide">
-      //         {" "}
-      //         <Tag style={{ fontSize: 16, padding: 5, margin: 5 }} color="blue">
-      //           {" "}
-      //           {record.akun_aktiva}{" "}
-      //         </Tag>{" "}
-      //         {record.jurnal_aktiva}{" "}
-      //       </p>
-      //       <p className="tracking-wide">
-      //         {" "}
-      //         <Tag
-      //           style={{ fontSize: 16, padding: 5, margin: 5 }}
-      //           color="green"
-      //         >
-      //           {" "}
-      //           {record.akun_pasiva}{" "}
-      //         </Tag>{" "}
-      //         {record.jurnal_pasiva}{" "}
-      //       </p>
-      //     </Space>
-      //   );
-      // },
     },
     {
-      title: "Debit (Rp.)",
-      dataIndex: "Aktiva",
+      title: "Debit",
+      dataIndex: "penempatan",
       key: "Aktiva",
       align: "right",
       width: 200,
       render: (text, record, index) => {
-        return (
-          <Space direction="vertical" size={0}>
-            <p> {ribuan(text)} </p>
-            <p> {ribuan(0)} </p>
-          </Space>
-        );
+        if (text === "AKTIVA") {
+          return <div>{formatRupiah(record.nominal) +",00"}</div>; // Display the "nominal" value if "penempatan" is "AKTIVA"
+        } else {
+          return ""; // Return null if "penempatan" is not "AKTIVA"
+        }
       },
     },
     {
-      title: "Kredit (Rp.)",
-      dataIndex: "Pasiva",
-      key: "Pasiva",
+      title: "Kredit",
+      dataIndex: "penempatan",
+      key: "pasiva",
       align: "right",
       width: 200,
       render: (text, record, index) => {
-        return (
-          <Space direction="vertical" size={0}>
-            <p> {ribuan(0)} </p>
-            <p> {ribuan(text)} </p>
-          </Space>
-        );
+        if (text === "PASIVA") {
+          return <div>{formatRupiah(record.nominal) +",00"}</div>; // Display the "nominal" value if "penempatan" is "AKTIVA"
+        } else {
+          return ""; // Return null if "penempatan" is not "AKTIVA"
+        }
       },
-    },
+    }
   ];
   return (
     <div className="p-5 bg-white rounded-lg">
@@ -290,6 +315,14 @@ const BukuBantuBelanja = () => {
 
             // }
           />
+          <Buttons
+              labelButton={"Reset"}
+              backgroundColor={"#FF0000"}
+              borderColor="white"
+              borderRadius={10}
+              icon={<ReloadOutlined />}
+              onClick={handleResetClick}
+            />
           {/* Render your Ant Design table component */}
         </div>
       </div>
@@ -307,22 +340,53 @@ const BukuBantuBelanja = () => {
             style={{ height: 200 }}
             marginBottom={10}
             filterOption={(input, option) =>
-              option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0 ||
-              option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              String(option.value)
+                .toLowerCase()
+                .indexOf(input.toLowerCase()) !== -1 ||
+              option.children.toLowerCase().indexOf(input.toLowerCase()) !== -1
             }
             onChange={pilkategori}
             placeholder={"---Silahkan Pilih Kategori---"}
             optionContent={
               <>
                 <Option value={110101010100}>Buku Bantu Kas</Option>
-                <Option value={"belanja"}>Buku Bantu Belanja</Option>
-                <Option value={"pajak"}>Buku Bantu Pajak</Option>
+                <Option value={5}>Buku Bantu Belanja</Option>
+                <Option value={2102}>Buku Bantu Pajak</Option>
                 <Option value={2}>Buku Bantu Hutang</Option>
               </>
             }
           />
         </div>
-
+          <div className="grid grid-cols-1" style={{ fontFamily: FONTSTYLE.POPPINS }}>
+            <label className="block mb-1 text-md font-bold">
+              Pilih Unit:
+            </label>
+            <Selects
+              style={{ width: 400 }}
+              placeholder={"---Silahkan Pilih Unit---"}
+              filterOption={(input, option) =>
+                String(option.value)
+                  .toLowerCase()
+                  .indexOf(input.toLowerCase()) !== -1 ||
+                option.children.toLowerCase().indexOf(input.toLowerCase()) !== -1
+              }
+              onChange={pilunit}
+              optionContent={
+              <>
+              <Option value="">---Silahkan Pilih Unit---</Option>
+                {Array.isArray(dataUnit) &&
+                  dataUnit.map((item) =>
+                    item.kode_unit !== null ? (
+                      <Option key={item.kode_unit} value={item.kode_unit}>
+                        {item.nama_unit}
+                      </Option>
+                    ) : null
+                )}
+              </>
+              }
+            
+            />
+          </div>
         <div
           className="grid grid-cols-1"
           style={{ fontFamily: FONTSTYLE.POPPINS }}
@@ -423,6 +487,7 @@ const BukuBantuBelanja = () => {
           ) : (
             <p></p>
           )}
+          
         </div>
       </div>
 
