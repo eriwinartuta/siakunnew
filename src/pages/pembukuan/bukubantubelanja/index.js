@@ -16,7 +16,8 @@ import { FONTSTYLE } from "../../../component/font";
 import {
   FileExcelOutlined,
   SyncOutlined,
-  FilePdfOutlined,ReloadOutlined
+  FilePdfOutlined,
+  ReloadOutlined,
 } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import { setGlobalTitle } from "../../../store/global";
@@ -37,170 +38,174 @@ import DokumenPdf from "./DokumenPdf";
 import { formatRupiah } from "../../../utils/formatRP";
 
 const BukuBantuBelanja = () => {
-    const { Search } = Input;
-    const { Option } = Select;
-    const [data, setData] = useState([]);
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const [dataUnit, setDataUnit] = useState(null);
-    const [selectedCategory, setSelectedCategory] = useState('');
-    const [selectedOption, setSelectedOption] = useState(null);
-    const [selectedDate, setSelectedDate] = useState(null);
-    const [selectedMonth, setSelectedMonth] = useState(null);
-    const [selectedYear, setSelectedYear] = useState(null);
-    const val = {};
-    console.log("data", dataUnit);
-    const bulan = (new Date().getMonth() + 1).toString().padStart(2, '0');
-    // ==================================================== //
-    const dateObj = new Date();
-    const month = dateObj.getUTCMonth() + 1;
-    const day = dateObj.getUTCDate();
-    const year = dateObj.getUTCFullYear();
-    const newdate = year + "-" + month + "-" + day;
-    // ==================================================== //
-    useEffect(() => {
-      getUnit();
-        dispatch(setGlobalTitle("Buku Bantu"));
-      }, [dispatch]);
+  const { Search } = Input;
+  const { Option } = Select;
+  const [data, setData] = useState([]);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [dataUnit, setDataUnit] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedMonth, setSelectedMonth] = useState(null);
+  const [selectedYear, setSelectedYear] = useState(null);
+  const [isEditForm, setIsEditForm] = useState(false);
+  const [isEditDone, setIsEditDone] = useState(false);
+  const val = {};
+  console.log("data", dataUnit);
+  const bulan = (new Date().getMonth() + 1).toString().padStart(2, "0");
+  // ==================================================== //
+  const dateObj = new Date();
+  const month = dateObj.getUTCMonth() + 1;
+  const day = dateObj.getUTCDate();
+  const year = dateObj.getUTCFullYear();
+  const newdate = year + "-" + month + "-" + day;
+  // ==================================================== //
+  useEffect(() => {
+    getUnit();
+    dispatch(setGlobalTitle("Buku Bantu"));
+  }, [dispatch]);
 
-      const getUnit = () => {
-        axios.get(URL_PANUTAN + BASE_PATH_PANUTAN.get_unit)
-          .then((data) => {
-            const response = data.data;
-            console.log("unit", response);
-            if (response?.length > 0) {
-              setDataUnit(response);
-            } else {
-              notification.error({
-                description: "Data Klasifikasi Tidak di temukan",
-                key: 12,
-              });
-            }
-          })
-          .catch((err) => {
-            notification.error({
-              description: err,
-              key: 14,
-            });
+  const getUnit = () => {
+    axios
+      .get(URL_PANUTAN + BASE_PATH_PANUTAN.get_unit)
+      .then((data) => {
+        const response = data.data;
+        console.log("unit", response);
+        if (response?.length > 0) {
+          setDataUnit(response);
+        } else {
+          notification.error({
+            description: "Data Klasifikasi Tidak di temukan",
+            key: 12,
           });
-      };
-      const cekJadwal = async (val) => {
-        const data = {
-          tanggal_awal: val.tanggal_awal,
-          tanggal_akhir: val.tanggal_akhir,
-          pengkelompokan: val.pengkelompokan,
-          bulan: val.bulan,
-          tahun: val.tahun,
-          akun_coa: val.akun_coa,
-          kode_unit: val.kode_unit,
-        };
-    
-        const o = {
-          
-          url: URL_SIAKUN + BASE_PATH_KARTU.list_kartu_nocontra,
-          data: data,
-        };
-        let loading = false;
-        try {
-          loading = true;
-          const response = await axios.post(o.url, data);
-          loading = false;
-          return response.data;
-        } catch (error) {
-          loading = false;
-          console.error('Error fetching data:', error);
-          throw error;
         }
-      };
-      const pilunit = (value) => {
-        setDataUnit(value);
-      };
-      const pilkategori = (value) => {
-        setSelectedCategory(value);
-      };
-    
-      const onChangeOption = (e) => {
-        setSelectedOption(e.target.value);
-      };
-    
-      const onChangeDate = (date) => {
-        setSelectedDate(date);
-      };
-    
-      const onChangeMonth = (date) => {
-        setSelectedMonth(date);
-      };
-    
-      const onChangeYear = (date) => {
-        setSelectedYear(date);
-      };
-      const handleResetClick = () => {
-        // setData([]);
-        // setDataUnit(null); 
-        // setSelectedCategory('');
-        // setSelectedOption(null); 
-        // setSelectedDate(null); 
-        // setSelectedMonth(null); 
-        // setSelectedYear(null); 
-        window.location.reload();
-      };
-      
-      const handleProsesClick = async () => {
-        let val = {
-          tanggal_awal: '',
-          tanggal_akhir: '',
-          pengkelompokan: '',
-          bulan: '',
-          tahun: '',
-          akun_coa: '',
-          kode_unit: '',
-            };
-            console.log("ll", val);
-        switch (selectedOption) {
-          case 1:
-            if (selectedDate && selectedDate.length === 2) {
-              const [startDate, endDate] = selectedDate;
-              val.tanggal_awal = moment(startDate).format('YYYY-MM-DD');
-              val.tanggal_akhir = moment(endDate).format('YYYY-MM-DD');
-              val.pengkelompokan = 'tanggal';
-              
-              val.bulan = bulan.toString();
-              val.tahun = year.toString();
-            }
-            break;
-          case 2:
-            val.tanggal_awal = selectedMonth.startOf('month').format('YYYY-MM-DD');
-            val.tanggal_akhir = selectedMonth.endOf('month').format('YYYY-MM-DD');
-            val.pengkelompokan = 'bulan';
-            val.bulan = selectedMonth.format('MM');
-            val.tahun = year.toString();
-            break;
-          case 3:
-            val.tanggal_awal = selectedYear.startOf('year').format('YYYY-MM-DD');
-            val.tanggal_akhir = selectedYear.endOf('year').format('YYYY-MM-DD');
-            val.pengkelompokan = 'tahun';
-            val.bulan = bulan.toString();
-            val.tahun = selectedYear.format('YYYY');
-            break;
-          default:
-            break;
+      })
+      .catch((err) => {
+        notification.error({
+          description: err,
+          key: 14,
+        });
+      });
+  };
+  const cekJadwal = async (val) => {
+    const data = {
+      tanggal_awal: val.tanggal_awal,
+      tanggal_akhir: val.tanggal_akhir,
+      pengkelompokan: val.pengkelompokan,
+      bulan: val.bulan,
+      tahun: val.tahun,
+      akun_coa: val.akun_coa,
+      kode_unit: val.kode_unit,
+    };
+
+    const o = {
+      url: URL_SIAKUN + BASE_PATH_KARTU.list_kartu_nocontra,
+      data: data,
+    };
+    let loading = false;
+    try {
+      loading = true;
+      const response = await axios.post(o.url, data);
+      loading = false;
+      return response.data;
+    } catch (error) {
+      loading = false;
+      console.error("Error fetching data:", error);
+      throw error;
+    }
+  };
+  const pilunit = (value) => {
+    setDataUnit(value);
+  };
+  const pilkategori = (value) => {
+    setSelectedCategory(value);
+  };
+
+  const onChangeOption = (e) => {
+    setSelectedOption(e.target.value);
+  };
+
+  const onChangeDate = (date) => {
+    setSelectedDate(date);
+  };
+
+  const onChangeMonth = (date) => {
+    setSelectedMonth(date);
+  };
+
+  const onChangeYear = (date) => {
+    setSelectedYear(date);
+  };
+  const handleResetClick = () => {
+    // setData([]);
+    // setDataUnit(null);
+    // setSelectedCategory('');
+    // setSelectedOption(null);
+    // setSelectedDate(null);
+    // setSelectedMonth(null);
+    // setSelectedYear(null);
+    window.location.reload();
+  };
+
+  const handleProsesClick = async () => {
+    let val = {
+      tanggal_awal: "",
+      tanggal_akhir: "",
+      pengkelompokan: "",
+      bulan: "",
+      tahun: "",
+      akun_coa: "",
+      kode_unit: "",
+    };
+    console.log("ll", val);
+    switch (selectedOption) {
+      case 1:
+        if (selectedDate && selectedDate.length === 2) {
+          const [startDate, endDate] = selectedDate;
+          val.tanggal_awal = moment(startDate).format("YYYY-MM-DD");
+          val.tanggal_akhir = moment(endDate).format("YYYY-MM-DD");
+          val.pengkelompokan = "tanggal";
+
+          val.bulan = bulan.toString();
+          val.tahun = year.toString();
         }
-    
-        val.akun_coa = selectedCategory;
-        // val.kode_unit = dataUnit || "";
-        val.kode_unit = dataUnit;
-    
-        try {
-          const data = await cekJadwal(val);
-          // Handle the returned data as needed
-          setData(data.data)
-          console.log(data);
-        } catch (error) {
-          // Handle the error
-          console.error(error);
-        }
-      };
-  
+        break;
+      case 2:
+        val.tanggal_awal = selectedMonth.startOf("month").format("YYYY-MM-DD");
+        val.tanggal_akhir = selectedMonth.endOf("month").format("YYYY-MM-DD");
+        val.pengkelompokan = "bulan";
+        val.bulan = selectedMonth.format("MM");
+        val.tahun = year.toString();
+        break;
+      case 3:
+        val.tanggal_awal = selectedYear.startOf("year").format("YYYY-MM-DD");
+        val.tanggal_akhir = selectedYear.endOf("year").format("YYYY-MM-DD");
+        val.pengkelompokan = "tahun";
+        val.bulan = bulan.toString();
+        val.tahun = selectedYear.format("YYYY");
+        break;
+      default:
+        break;
+    }
+
+    val.akun_coa = selectedCategory;
+    // val.kode_unit = dataUnit || "";
+    val.kode_unit = dataUnit;
+
+    try {
+      const data = await cekJadwal(val);
+      // Handle the returned data as needed
+      setData(data.data);
+      setIsEditForm(false);
+      setIsEditDone(true);
+      console.log(data);
+    } catch (error) {
+      // Handle the error
+      console.error(error);
+    }
+  };
+
   const colomntrans = [
     {
       title: "No",
@@ -221,8 +226,10 @@ const BukuBantuBelanja = () => {
       dataIndex: "tanggal_transaksi",
       key: "tanggal_transaksi",
       width: 150,
-      sorter: (a, b) => new Date(a.tanggal_transaksi).getTime() - new Date(b.tanggal_transaksi).getTime(),
-      render: (text, record) => <div>{formatDate(text)}</div>
+      sorter: (a, b) =>
+        new Date(a.tanggal_transaksi).getTime() -
+        new Date(b.tanggal_transaksi).getTime(),
+      render: (text, record) => <div>{formatDate(text)}</div>,
     },
     {
       title: " Keterangan ",
@@ -237,7 +244,7 @@ const BukuBantuBelanja = () => {
       width: 200,
       render: (text, record, index) => {
         if (text === "AKTIVA") {
-          return <div>{formatRupiah(record.nominal) +",00"}</div>; // Display the "nominal" value if "penempatan" is "AKTIVA"
+          return <div>{formatRupiah(record.nominal) + ",00"}</div>; // Display the "nominal" value if "penempatan" is "AKTIVA"
         } else {
           return ""; // Return null if "penempatan" is not "AKTIVA"
         }
@@ -251,12 +258,12 @@ const BukuBantuBelanja = () => {
       width: 200,
       render: (text, record, index) => {
         if (text === "PASIVA") {
-          return <div>{formatRupiah(record.nominal) +",00"}</div>; // Display the "nominal" value if "penempatan" is "AKTIVA"
+          return <div>{formatRupiah(record.nominal) + ",00"}</div>; // Display the "nominal" value if "penempatan" is "AKTIVA"
         } else {
           return ""; // Return null if "penempatan" is not "AKTIVA"
         }
       },
-    }
+    },
   ];
   return (
     <div className="p-5 bg-white rounded-lg">
@@ -288,23 +295,21 @@ const BukuBantuBelanja = () => {
           </h5>
         </div>
         <div className="flex gap-4">
-          <DokumenPdf />
-          {/* <Buttons
-            labelButton={"Unduh PDF"}
-            backgroundColor={"maroon"}
-            color={"white"}
-            icon={<FilePdfOutlined />}
-            borderColor="white"
-            borderRadius={10}
-            //   onClick={handleDownload}
-            // onClick={() =>
-            //   exportToExcel(postsptd?.data, fields, headers, columnWidths)
+          <DokumenPdf
+            isEditDone={isEditDone}
+            isEditForm={isEditForm}
+            dataTable={data}
+            dataUnit={dataUnit}
+          />
 
-            // }
-          /> */}
           <Buttons
+            disabled
             labelButton={"Unduh Excel"}
-            backgroundColor={"green"}
+            backgroundColor={
+              isEditDone === true && isEditForm === false
+                ? "green"
+                : "lightgray"
+            }
             color={"white"}
             icon={<FileExcelOutlined />}
             borderColor="white"
@@ -316,13 +321,13 @@ const BukuBantuBelanja = () => {
             // }
           />
           <Buttons
-              labelButton={"Reset"}
-              backgroundColor={"#FF0000"}
-              borderColor="white"
-              borderRadius={10}
-              icon={<ReloadOutlined />}
-              onClick={handleResetClick}
-            />
+            labelButton={"Reset"}
+            backgroundColor={"#FF0000"}
+            borderColor="white"
+            borderRadius={10}
+            icon={<ReloadOutlined />}
+            onClick={handleResetClick}
+          />
           {/* Render your Ant Design table component */}
         </div>
       </div>
@@ -357,23 +362,24 @@ const BukuBantuBelanja = () => {
             }
           />
         </div>
-          <div className="grid grid-cols-1" style={{ fontFamily: FONTSTYLE.POPPINS }}>
-            <label className="block mb-1 text-md font-bold">
-              Pilih Unit:
-            </label>
-            <Selects
-              style={{ width: 400 }}
-              placeholder={"---Silahkan Pilih Unit---"}
-              filterOption={(input, option) =>
-                String(option.value)
-                  .toLowerCase()
-                  .indexOf(input.toLowerCase()) !== -1 ||
-                option.children.toLowerCase().indexOf(input.toLowerCase()) !== -1
-              }
-              onChange={pilunit}
-              optionContent={
+        <div
+          className="grid grid-cols-1"
+          style={{ fontFamily: FONTSTYLE.POPPINS }}
+        >
+          <label className="block mb-1 text-md font-bold">Pilih Unit:</label>
+          <Selects
+            style={{ width: 400 }}
+            placeholder={"---Silahkan Pilih Unit---"}
+            filterOption={(input, option) =>
+              String(option.value)
+                .toLowerCase()
+                .indexOf(input.toLowerCase()) !== -1 ||
+              option.children.toLowerCase().indexOf(input.toLowerCase()) !== -1
+            }
+            onChange={pilunit}
+            optionContent={
               <>
-              <Option value="">---Silahkan Pilih Unit---</Option>
+                <Option value="">---Silahkan Pilih Unit---</Option>
                 {Array.isArray(dataUnit) &&
                   dataUnit.map((item) =>
                     item.kode_unit !== null ? (
@@ -381,12 +387,11 @@ const BukuBantuBelanja = () => {
                         {item.nama_unit}
                       </Option>
                     ) : null
-                )}
+                  )}
               </>
-              }
-            
-            />
-          </div>
+            }
+          />
+        </div>
         <div
           className="grid grid-cols-1"
           style={{ fontFamily: FONTSTYLE.POPPINS }}
@@ -487,7 +492,6 @@ const BukuBantuBelanja = () => {
           ) : (
             <p></p>
           )}
-          
         </div>
       </div>
 

@@ -1,13 +1,14 @@
 import React from "react";
-// import { formatRupiah } from "../../../utils";
+import { formatRupiah } from "../../../utils/formatRP";
 
-function TableData({ id, data }) {
+function TableData({ id, dataTable }) {
   return (
     <>
       <table id={id}>
         <thead>
           <tr>
             <td>No</td>
+            <td>Unit</td>
             <td>Tanggal</td>
             <td>Keterangan</td>
             <td>Debit</td>
@@ -15,18 +16,32 @@ function TableData({ id, data }) {
           </tr>
         </thead>
         <tbody>
-          {(res, index) => {
-            console.log("dataHtml", data);
+          {dataTable.map((res, index) => {
             return (
               <tr>
-                <td rowSpan={res?.detail.length}>{index + 1}</td>
-                <td rowSpan={res?.detail.length}>{res?.tanggal_transaksi}</td>
-                <td rowSpan={res?.detail.length}>{res?.judul}</td>
+                <td>{index + 1}</td>
+                <td>{res?.nama_unit}</td>
+                <td>{res?.tanggal_transaksi}</td>
+                <td>{res?.keterangan}</td>
+                <td>
+                  {res?.penempatan === "AKTIVA" ? (
+                    <div>{formatRupiah(res?.nominal) + ",00"}</div>
+                  ) : (
+                    ""
+                  )}
+                </td>
+                <td>
+                  {res?.penempatan === "PASIVA" ? (
+                    <div>{formatRupiah(res?.nominal) + ",00"}</div>
+                  ) : (
+                    ""
+                  )}
+                </td>
 
                 {/* <td></td> */}
               </tr>
             );
-          }}
+          })}
         </tbody>
       </table>
     </>

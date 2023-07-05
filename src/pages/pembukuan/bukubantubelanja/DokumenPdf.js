@@ -10,12 +10,12 @@ import moment from "moment";
 import "moment/locale/id";
 moment.locale("id");
 
-function DokumenPdf({ dataPetugas }) {
+function DokumenPdf({ dataTable, isEditDone, isEditForm, dataUnit }) {
   const data = {
     lembaga: "Kementerian Pendidikan, Kebudayaan, Riset, dan Teknologi",
     organisasi: "Universitas Terbuka",
     provinsi: "Banten/Tangerang Selatan",
-    satuankerja: "Universitas Terbuka /",
+    satuankerja: "Universitas Terbuka /" + dataUnit?.nama_unit,
     tglrka: "-",
     tahunanggaran: "2023",
     bulan: "Juni",
@@ -66,11 +66,10 @@ function DokumenPdf({ dataPetugas }) {
       },
       columnStyles: {
         1: { halign: "left" },
-        3: { halign: "left", cellWidth: "wrap" },
+        2: { halign: "left" },
+        3: { halign: "left" },
+        4: { halign: "right", cellWidth: "wrap" },
         5: { halign: "right", cellWidth: "wrap" },
-        6: { halign: "right", cellWidth: "wrap" },
-        7: { halign: "right", cellWidth: "wrap" },
-        8: { cellPadding: 10 },
       },
     });
 
@@ -229,16 +228,19 @@ function DokumenPdf({ dataPetugas }) {
           </tbody>
         </table>
 
-        <TableData id="tablepetugas" dataPetugas={dataPetugas} />
+        <TableData id="tablepetugas" dataTable={dataTable} />
       </div>
       <Tooltip title="Klik Untuk Unduh PDF">
         <Buttons
+          disable={isEditDone === true && isEditForm === false ? false : true}
+          backgroundColor={
+            isEditDone === true && isEditForm === false ? "maroon" : "lightgray"
+          }
           labelButton={"Unduh PDF"}
           color={"white"}
           icon={<FilePdfOutlined />}
           borderColor="white"
           borderRadius={10}
-          backgroundColor={"maroon"}
           onClick={() => {
             generatePdf();
           }}
