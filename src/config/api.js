@@ -129,7 +129,8 @@ export const BASE_PATH_REKONSILIASI = {
 }
 export const BASE_PATH_KARTU = {
 list_kartu : "/apiv1/pagu-jurnal/list-kas-jurnal",
-list_kartu_nocontra: "/apiv1/pagu-jurnal/list-kas-jurnal-nocontra"
+list_kartu_nocontra: "/apiv1/pagu-jurnal/list-kas-jurnal-nocontra",
+get_coa: "/apiv1/pagu-jurnal/list-selection-unit/"
 }
 
 export const BASE_PATH_PANUTAN = {

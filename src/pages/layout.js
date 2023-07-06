@@ -221,7 +221,7 @@ const Layout = () => {
                 element={
                   menu?.some((a) => a.nama_menu1 === "Pembukuan") === true ? (
                     <Suspense fallback={<div> Mohon Menunggu ... </div>}>
-                      <PembukuanLazy />
+                      <BukuBantuBelanja />
                     </Suspense>
                   ) : (
                     <p>Halaman Tidak Di Temukan Brosist!!</p>

@@ -9,6 +9,7 @@ export const GLOBAL_TITTLE =  `${prefix}/globaltitle`
 export const AUTHUSER = `${prefix}/authuser`
 export const TOKEN_BARU = `${prefix}/tokebaru`
 export const TOKEN_LAMA = `${prefix}/tokenlama`
+export const GET_KODE_UNIT = `${prefix}/getkodeunit`
 
 
 

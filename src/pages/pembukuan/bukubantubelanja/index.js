@@ -8,7 +8,7 @@ import {
   Space,
   Button,
   Tag,
-  notification,
+  notification, Spin
 } from "antd";
 import React, { useEffect, useState } from "react";
 import { Buttons, DatePickers, Selects } from "../../../component";
@@ -43,7 +43,9 @@ const BukuBantuBelanja = () => {
   const [data, setData] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const [dataUnit, setDataUnit] = useState(null);
+  const [selectedUnit, setSelectedUnit] = useState('');
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedOption, setSelectedOption] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
@@ -52,7 +54,7 @@ const BukuBantuBelanja = () => {
   const [isEditForm, setIsEditForm] = useState(false);
   const [isEditDone, setIsEditDone] = useState(false);
   const val = {};
-  console.log("data", dataUnit);
+  console.log("data", selectedUnit);
   const bulan = (new Date().getMonth() + 1).toString().padStart(2, "0");
   // ==================================================== //
   const dateObj = new Date();
@@ -115,8 +117,11 @@ const BukuBantuBelanja = () => {
       throw error;
     }
   };
+  // const pilunit = (value) => {
+  //   setDataUnit(value);
+  // };
   const pilunit = (value) => {
-    setDataUnit(value);
+    setSelectedUnit(value);
   };
   const pilkategori = (value) => {
     setSelectedCategory(value);
@@ -149,6 +154,7 @@ const BukuBantuBelanja = () => {
   };
 
   const handleProsesClick = async () => {
+    setIsLoading(true);
     let val = {
       tanggal_awal: "",
       tanggal_akhir: "",
@@ -191,7 +197,7 @@ const BukuBantuBelanja = () => {
 
     val.akun_coa = selectedCategory;
     // val.kode_unit = dataUnit || "";
-    val.kode_unit = dataUnit;
+    val.kode_unit = selectedUnit;
 
     try {
       const data = await cekJadwal(val);
@@ -203,6 +209,9 @@ const BukuBantuBelanja = () => {
     } catch (error) {
       // Handle the error
       console.error(error);
+    }finally {
+      // Set the loading state to false after the API request is completed
+      setIsLoading(false);
     }
   };
 
@@ -216,11 +225,11 @@ const BukuBantuBelanja = () => {
         return <p className="m-0">{index + 1}</p>;
       },
     },
-    {
-      title: "Unit",
-      dataIndex: "nama_unit",
-      key: "nama_unit",
-    },
+    // {
+    //   title: "Unit",
+    //   dataIndex: "nama_unit",
+    //   key: "nama_unit",
+    // },
     {
       title: "Tanggal",
       dataIndex: "tanggal_transaksi",
@@ -334,6 +343,37 @@ const BukuBantuBelanja = () => {
       <Divider />
 
       <div>
+      <div
+          className="grid grid-cols-1"
+          style={{ fontFamily: FONTSTYLE.POPPINS }}
+        >
+          <label className="block mb-1 text-md font-bold">Pilih Unit:</label>
+          <Selects
+            style={{ width: 400 }}
+            placeholder={"---Silahkan Pilih Unit---"}
+            filterOption={(input, option) =>
+              String(option.value)
+                .toLowerCase()
+                .indexOf(input.toLowerCase()) !== -1 ||
+              option.children.toLowerCase().indexOf(input.toLowerCase()) !== -1
+            }
+            onChange={pilunit}
+            value={selectedUnit}
+            optionContent={
+              <>
+                <Option value="">---Silahkan Pilih Unit---</Option>
+                {Array.isArray(dataUnit) &&
+                  dataUnit.map((item) =>
+                    item.kode_unit !== null ? (
+                      <Option key={item.kode_unit} value={item.kode_unit}>
+                        {item.nama_unit}
+                      </Option>
+                    ) : null
+                  )}
+              </>
+            }
+          />
+        </div>
         <div
           className="grid grid-cols-1"
           style={{ fontFamily: FONTSTYLE.POPPINS }}
@@ -362,36 +402,7 @@ const BukuBantuBelanja = () => {
             }
           />
         </div>
-        <div
-          className="grid grid-cols-1"
-          style={{ fontFamily: FONTSTYLE.POPPINS }}
-        >
-          <label className="block mb-1 text-md font-bold">Pilih Unit:</label>
-          <Selects
-            style={{ width: 400 }}
-            placeholder={"---Silahkan Pilih Unit---"}
-            filterOption={(input, option) =>
-              String(option.value)
-                .toLowerCase()
-                .indexOf(input.toLowerCase()) !== -1 ||
-              option.children.toLowerCase().indexOf(input.toLowerCase()) !== -1
-            }
-            onChange={pilunit}
-            optionContent={
-              <>
-                <Option value="">---Silahkan Pilih Unit---</Option>
-                {Array.isArray(dataUnit) &&
-                  dataUnit.map((item) =>
-                    item.kode_unit !== null ? (
-                      <Option key={item.kode_unit} value={item.kode_unit}>
-                        {item.nama_unit}
-                      </Option>
-                    ) : null
-                  )}
-              </>
-            }
-          />
-        </div>
+        
         <div
           className="grid grid-cols-1"
           style={{ fontFamily: FONTSTYLE.POPPINS }}
@@ -421,15 +432,19 @@ const BukuBantuBelanja = () => {
                 format={"YYYY-MM-DD"}
                 onChange={onChangeDate}
               />
-              <Buttons
-                labelButton={"Proses"}
-                borderColor={"#229CE1"}
-                backgroundColor={"#229CE1"}
-                color={"white"}
-                marginLeft={5}
-                icon={<SyncOutlined />}
-                onClick={handleProsesClick}
-              />
+              {isLoading ? (
+                <Spin size="large" /> // Render the loading animation while isLoading is true
+              ) : (
+                <Buttons
+                  labelButton={"Proses"}
+                  borderColor={"#229CE1"}
+                  backgroundColor={"#229CE1"}
+                  color={"white"}
+                  marginLeft={5}
+                  icon={<SyncOutlined />}
+                  onClick={handleProsesClick}
+                />
+              )}
             </div>
           ) : selectedOption === 2 ? (
             <div
@@ -450,7 +465,7 @@ const BukuBantuBelanja = () => {
                 onChange={onChangeMonth}
               />
 
-              <Buttons
+              {/* <Buttons
                 labelButton={"Proses"}
                 borderColor={"#229CE1"}
                 backgroundColor={"#229CE1"}
@@ -458,7 +473,20 @@ const BukuBantuBelanja = () => {
                 marginLeft={5}
                 icon={<SyncOutlined />}
                 onClick={handleProsesClick}
-              />
+              /> */}
+              {isLoading ? (
+                <Spin size="large" /> // Render the loading animation while isLoading is true
+              ) : (
+                <Buttons
+                  labelButton={"Proses"}
+                  borderColor={"#229CE1"}
+                  backgroundColor={"#229CE1"}
+                  color={"white"}
+                  marginLeft={5}
+                  icon={<SyncOutlined />}
+                  onClick={handleProsesClick}
+                />
+              )}
             </div>
           ) : selectedOption === 3 ? (
             <div
@@ -479,15 +507,19 @@ const BukuBantuBelanja = () => {
                 onChange={onChangeYear}
               />
 
-              <Buttons
-                labelButton={"Proses"}
-                borderColor={"#229CE1"}
-                backgroundColor={"#229CE1"}
-                color={"white"}
-                marginLeft={5}
-                icon={<SyncOutlined />}
-                onClick={handleProsesClick}
-              />
+                {isLoading ? (
+                  <Spin size="large" /> // Render the loading animation while isLoading is true
+                ) : (
+                  <Buttons
+                    labelButton={"Proses"}
+                    borderColor={"#229CE1"}
+                    backgroundColor={"#229CE1"}
+                    color={"white"}
+                    marginLeft={5}
+                    icon={<SyncOutlined />}
+                    onClick={handleProsesClick}
+                  />
+                )}
             </div>
           ) : (
             <p></p>

@@ -4,7 +4,7 @@ import { lazy } from "react";
 import { Route, Routes } from "react-router-dom";
 
 const BantuBelanjaLazy = lazy(() =>
-  import("../../pages/pembukuan/bukubantubelanja/index")
+  import("../../pages/pembukuan/bukubantubelanja/indexRole")
 );
 
 const BantuBelanja = () => {
