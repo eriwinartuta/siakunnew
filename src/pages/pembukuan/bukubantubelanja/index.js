@@ -8,7 +8,8 @@ import {
   Space,
   Button,
   Tag,
-  notification, Spin
+  notification,
+  Spin,
 } from "antd";
 import React, { useEffect, useState } from "react";
 import { Buttons, DatePickers, Selects } from "../../../component";
@@ -36,6 +37,7 @@ import { formatDate } from "../../../utils/format_tgl_indo";
 import moment from "moment";
 import DokumenPdf from "./DokumenPdf";
 import { formatRupiah } from "../../../utils/formatRP";
+import ExcelCreate from "./component/excelcreate";
 
 const BukuBantuBelanja = () => {
   const { Search } = Input;
@@ -45,7 +47,7 @@ const BukuBantuBelanja = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [dataUnit, setDataUnit] = useState(null);
-  const [selectedUnit, setSelectedUnit] = useState('');
+  const [selectedUnit, setSelectedUnit] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedOption, setSelectedOption] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
@@ -209,7 +211,7 @@ const BukuBantuBelanja = () => {
     } catch (error) {
       // Handle the error
       console.error(error);
-    }finally {
+    } finally {
       // Set the loading state to false after the API request is completed
       setIsLoading(false);
     }
@@ -218,6 +220,8 @@ const BukuBantuBelanja = () => {
   const colomntrans = [
     {
       title: "No",
+      key: "no",
+
       dataIndex: "index",
       key: "index",
       width: 70,
@@ -311,24 +315,13 @@ const BukuBantuBelanja = () => {
             dataUnit={dataUnit}
           />
 
-          <Buttons
-            disabled
-            labelButton={"Unduh Excel"}
-            backgroundColor={
-              isEditDone === true && isEditForm === false
-                ? "green"
-                : "lightgray"
-            }
-            color={"white"}
-            icon={<FileExcelOutlined />}
-            borderColor="white"
-            borderRadius={10}
-            //   onClick={handleDownload}
-            // onClick={() =>
-            //   exportToExcel(postsptd?.data, fields, headers, columnWidths)
-
-            // }
+          <ExcelCreate
+            dataTable={data}
+            tableDataPegawai={colomntrans}
+            isEditDone={isEditDone}
+            isEditForm={isEditForm}
           />
+
           <Buttons
             labelButton={"Reset"}
             backgroundColor={"#FF0000"}
@@ -343,7 +336,7 @@ const BukuBantuBelanja = () => {
       <Divider />
 
       <div>
-      <div
+        <div
           className="grid grid-cols-1"
           style={{ fontFamily: FONTSTYLE.POPPINS }}
         >
@@ -402,7 +395,7 @@ const BukuBantuBelanja = () => {
             }
           />
         </div>
-        
+
         <div
           className="grid grid-cols-1"
           style={{ fontFamily: FONTSTYLE.POPPINS }}
@@ -507,19 +500,19 @@ const BukuBantuBelanja = () => {
                 onChange={onChangeYear}
               />
 
-                {isLoading ? (
-                  <Spin size="large" /> // Render the loading animation while isLoading is true
-                ) : (
-                  <Buttons
-                    labelButton={"Proses"}
-                    borderColor={"#229CE1"}
-                    backgroundColor={"#229CE1"}
-                    color={"white"}
-                    marginLeft={5}
-                    icon={<SyncOutlined />}
-                    onClick={handleProsesClick}
-                  />
-                )}
+              {isLoading ? (
+                <Spin size="large" /> // Render the loading animation while isLoading is true
+              ) : (
+                <Buttons
+                  labelButton={"Proses"}
+                  borderColor={"#229CE1"}
+                  backgroundColor={"#229CE1"}
+                  color={"white"}
+                  marginLeft={5}
+                  icon={<SyncOutlined />}
+                  onClick={handleProsesClick}
+                />
+              )}
             </div>
           ) : (
             <p></p>

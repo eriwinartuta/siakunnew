@@ -8,7 +8,6 @@ function TableData({ id, dataTable }) {
         <thead>
           <tr>
             <td>No</td>
-            <td>Unit</td>
             <td>Tanggal</td>
             <td>Keterangan</td>
             <td>Debit</td>
@@ -20,7 +19,7 @@ function TableData({ id, dataTable }) {
             return (
               <tr>
                 <td>{index + 1}</td>
-                <td>{res?.nama_unit}</td>
+
                 <td>{res?.tanggal_transaksi}</td>
                 <td>{res?.keterangan}</td>
                 <td>
