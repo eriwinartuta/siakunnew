@@ -12,9 +12,7 @@ import React, { useEffect, useState } from "react";
 import { Buttons, Selects } from "../../../component";
 import { FONTSTYLE } from "../../../component/font";
 import {
-  FileExcelOutlined,
   SyncOutlined,
-  FilePdfOutlined,
   ReloadOutlined,
 } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
@@ -38,6 +36,7 @@ const BukuBantuBelanja = () => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [dataUnit, setDataUnit] = useState(null);
+  const [pdfData, setPdfData] = useState(null);
   const [selectedUnit, setSelectedUnit] = useState('');
   const [dataCoa, setDataCoa] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -54,6 +53,8 @@ const BukuBantuBelanja = () => {
   console.log("======================");
   console.log("data unit", kode_unit);
   console.log("data coa", dataCoa);
+  console.log("data list", data);
+  console.log("data PDF", pdfData);
   console.log("=====================");
   
   // ==================================================== //
@@ -138,6 +139,7 @@ const BukuBantuBelanja = () => {
       akun_coa: val.akun_coa,
       kode_unit: val.kode_unit,
     };
+    setPdfData(data);
     console.log("data input", data);
     const o = {
       url: URL_SIAKUN + BASE_PATH_KARTU.list_kartu_nocontra,
@@ -148,6 +150,7 @@ const BukuBantuBelanja = () => {
       loading = true;
       const response = await axios.post(o.url, data);
       loading = false;
+      
       return response.data;
     } catch (error) {
       loading = false;

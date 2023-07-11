@@ -5,13 +5,10 @@ import {
     Select,
     DatePicker,
     Divider,
-    Space,
-    Button,
-    Tag,
     notification, Spin
   } from "antd";
   import React, { useEffect, useState } from "react";
-  import { Buttons, DatePickers, Selects } from "../../../component";
+  import { Buttons, Selects } from "../../../component";
   import { FONTSTYLE } from "../../../component/font";
   import {
     FileExcelOutlined,
@@ -23,31 +20,21 @@ import {
   import { setGlobalTitle } from "../../../store/global";
   import {
     BASE_PATH_KARTU,
-    BASE_PATH_PANUTAN,
-    EXPENDITURE_APP,
-    UNITPANUTAN,
-    URL_PANUTAN,
     URL_SIAKUN,
   } from "../../../config/api";
   import axios from "axios";
-  import ribuan from "../../../utils/formatribu";
-  import { useNavigate } from "react-router-dom";
   import { formatDate } from "../../../utils/format_tgl_indo";
   import moment from "moment";
   import DokumenPdf from "./DokumenPdf";
   import { formatRupiah } from "../../../utils/formatRP";
   
   const IndexUnit = () => {
-    const { Search } = Input;
     const { Option } = Select;
     const [data, setData] = useState([]);
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const {user } = useSelector((state) => state.reducerGlobal)
-    console.log("user", user.data.TrxUnitKerjaPegawais[0]?.Unit?.UnitBaru?.kode_unit);
     const [isLoading, setIsLoading] = useState(false);
     const [dataCoa, setDataCoa] = useState(null);
-    const [selectedUnit, setSelectedUnit] = useState('');
     const [selectedCategory, setSelectedCategory] = useState("");
     const [selectedOption, setSelectedOption] = useState(null);
     const [selectedDate, setSelectedDate] = useState(null);
@@ -55,11 +42,15 @@ import {
     const [selectedYear, setSelectedYear] = useState(null);
     const [isEditForm, setIsEditForm] = useState(false);
     const [isEditDone, setIsEditDone] = useState(false);
-    const val = {};
+    const [searchText, setSearchText] = useState("");
+
+    console.log("==========================");
+    console.log("user", user.data.TrxUnitKerjaPegawais[0]?.Unit?.UnitBaru?.kode_unit);
     console.log("data", dataCoa);
+    console.log("=========================");
     const kode_unit = user.data.TrxUnitKerjaPegawais[0]?.Unit?.UnitBaru?.kode_unit
-    const bulan = (new Date().getMonth() + 1).toString().padStart(2, "0");
     // ==================================================== //
+    const bulan = (new Date().getMonth() + 1).toString().padStart(2, "0");
     const dateObj = new Date();
     const month = dateObj.getUTCMonth() + 1;
     const day = dateObj.getUTCDate();
@@ -120,12 +111,7 @@ import {
         throw error;
       }
     };
-    // const pilunit = (value) => {
-    //   setDataUnit(value);
-    // };
-    // const pilunit = (value) => {
-    //   setSelectedUnit(value);
-    // };
+
     const pilkategori = (value) => {
       setSelectedCategory(value);
     };
@@ -251,9 +237,9 @@ import {
         width: 200,
         render: (text, record, index) => {
           if (text === "AKTIVA") {
-            return <div>{formatRupiah(record.nominal) + ",00"}</div>; // Display the "nominal" value if "penempatan" is "AKTIVA"
+            return <div>{formatRupiah(record.nominal) + ",00"}</div>; 
           } else {
-            return ""; // Return null if "penempatan" is not "AKTIVA"
+            return ""; 
           }
         },
       },
@@ -265,9 +251,9 @@ import {
         width: 200,
         render: (text, record, index) => {
           if (text === "PASIVA") {
-            return <div>{formatRupiah(record.nominal) + ",00"}</div>; // Display the "nominal" value if "penempatan" is "AKTIVA"
+            return <div>{formatRupiah(record.nominal) + ",00"}</div>;
           } else {
-            return ""; // Return null if "penempatan" is not "AKTIVA"
+            return "";
           }
         },
       },
@@ -386,7 +372,7 @@ import {
             <label className="block mb-1 text-md font-bold">
               Pilih Berdasarkan:
             </label>
-            <Radio.Group onChange={onChangeOption} value={selectedOption}>
+            <Radio.Group onChange={onChangeOption} value={selectedOption} disabled={!selectedCategory}>
               <Radio value={1}>Tanggal</Radio>
               <Radio value={2}>Bulan</Radio>
               <Radio value={3}>Tahun</Radio>
@@ -437,17 +423,8 @@ import {
                   onChange={onChangeMonth}
                 />
   
-                {/* <Buttons
-                  labelButton={"Proses"}
-                  borderColor={"#229CE1"}
-                  backgroundColor={"#229CE1"}
-                  color={"white"}
-                  marginLeft={5}
-                  icon={<SyncOutlined />}
-                  onClick={handleProsesClick}
-                /> */}
                 {isLoading ? (
-                  <Spin size="large" /> // Render the loading animation while isLoading is true
+                  <Spin size="large" />
                 ) : (
                   <Buttons
                     labelButton={"Proses"}
@@ -480,7 +457,7 @@ import {
                 />
   
                   {isLoading ? (
-                    <Spin size="large" /> // Render the loading animation while isLoading is true
+                    <Spin size="large" />
                   ) : (
                     <Buttons
                       labelButton={"Proses"}
@@ -498,7 +475,19 @@ import {
             )}
           </div>
         </div>
-  
+        <Divider/>
+        <div>
+          <label className="block mb-1 text-md font-bold">
+            Cari Data:
+          </label>
+          <Input
+            style={{ marginBottom: 16, marginTop:2 }}
+            placeholder="Search..."
+            value={searchText}
+            disabled={!data || data.length === 0}
+            onChange={(e) => setSearchText(e.target.value)}
+          />
+        </div>
         <div
           style={{
             padding: 5,
@@ -511,7 +500,25 @@ import {
           }}
         >
           <Table
-            dataSource={data}
+            dataSource={data.filter((item) => {
+              const formattedSearchText = searchText.toLowerCase();
+      
+              // Filter based on searchText
+              const searchMatch = Object.values(item).some((value) => {
+                const formattedValue = value.toString().toLowerCase();
+                return formattedValue.includes(formattedSearchText);
+              });
+              if (searchMatch) return true;
+      
+              // Filter based on specific date
+              const searchDate = moment(searchText, "D MMMM", true);
+              if (searchDate.isValid()) {
+                const itemDate = moment(item.tanggal_transaksi, "YYYY-MM-DD");
+                return itemDate.format("D MMMM") === searchDate.format("D MMMM");
+              }
+      
+              return false;
+            })}
             columns={colomntrans}
             bordered
             pagination={{ pageSize: 50 }}

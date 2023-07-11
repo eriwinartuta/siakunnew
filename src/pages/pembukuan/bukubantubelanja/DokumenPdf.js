@@ -15,7 +15,7 @@ function DokumenPdf({ dataTable, isEditDone, isEditForm, dataUnit }) {
     lembaga: "Kementerian Pendidikan, Kebudayaan, Riset, dan Teknologi",
     organisasi: "Universitas Terbuka",
     provinsi: "Banten/Tangerang Selatan",
-    satuankerja: "Universitas Terbuka /" + dataUnit?.nama_unit,
+    satuankerja: "Universitas Terbuka /" + dataTable[0]?.nama_unit,
     tglrka: "-",
     tahunanggaran: "2023",
     bulan: "Juni",
