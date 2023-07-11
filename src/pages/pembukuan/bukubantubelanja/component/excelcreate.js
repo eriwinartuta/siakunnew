@@ -21,7 +21,7 @@ const ExcelCreate = ({
     });
     setListBank([...new Set(listDataPegawaiBank)]);
   };
-
+  console.log({ tableDataPegawai });
   async function cetakExcel() {
     const ExcelJS = require("exceljs");
     const fileType =
@@ -31,7 +31,7 @@ const ExcelCreate = ({
       pageSetup: { paperSize: 9, orientation: "potrait" },
     });
     const filterDataTable = tableDataPegawai.filter((e) => {
-      return e.title !== "No";
+      return e.title !== "No" && e.title !== "Unit";
     });
     const finalDataTable = [{ key: "no" }, ...filterDataTable];
     const colWidth = (val) => {
@@ -56,6 +56,7 @@ const ExcelCreate = ({
       return a;
     });
     wsDataPegawai.columns = dataKolom;
+    console.log("datakolom", dataKolom);
     const headerCol = [
       {
         no: "No",
@@ -152,11 +153,12 @@ const ExcelCreate = ({
         no: i + 1,
         tanggal_transaksi: e.tanggal_transaksi,
         keterangan: e.keterangan,
-        Aktiva: parseFloat(e.Aktiva),
-        pasiva: parseFloat(e.pasiva),
+        Aktiva: e.penempatan === "AKTIVA" ? parseInt(e.nominal) : 0,
+        pasiva: e.penempatan === "PASIVA" ? parseInt(e.nominal) : 0,
       };
       return d;
     });
+    console.log("dataheader", dataTable);
     headerRow.forEach((item, i) => {
       wsDataPegawai.addRow(item);
     });

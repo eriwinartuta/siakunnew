@@ -11,10 +11,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { Buttons, Selects } from "../../../component";
 import { FONTSTYLE } from "../../../component/font";
-import {
-  SyncOutlined,
-  ReloadOutlined,
-} from "@ant-design/icons";
+import { SyncOutlined, ReloadOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import { setGlobalTitle } from "../../../store/global";
 import {
@@ -37,7 +34,7 @@ const BukuBantuBelanja = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [dataUnit, setDataUnit] = useState(null);
   const [pdfData, setPdfData] = useState(null);
-  const [selectedUnit, setSelectedUnit] = useState('');
+  const [selectedUnit, setSelectedUnit] = useState("");
   const [dataCoa, setDataCoa] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedOption, setSelectedOption] = useState(null);
@@ -49,14 +46,13 @@ const BukuBantuBelanja = () => {
   const [searchText, setSearchText] = useState("");
   const kode_unit = selectedUnit;
 
-
   console.log("======================");
   console.log("data unit", kode_unit);
   console.log("data coa", dataCoa);
   console.log("data list", data);
   console.log("data PDF", pdfData);
   console.log("=====================");
-  
+
   // ==================================================== //
   const bulan = (new Date().getMonth() + 1).toString().padStart(2, "0");
   const dateObj = new Date();
@@ -99,7 +95,7 @@ const BukuBantuBelanja = () => {
         });
       });
   };
-  
+
   const getCoA = () => {
     axios
       .get(URL_SIAKUN + BASE_PATH_KARTU.get_coa + kode_unit)
@@ -128,7 +124,7 @@ const BukuBantuBelanja = () => {
           key: 14,
         });
       });
-  }
+  };
   const cekJadwal = async (val) => {
     const data = {
       tanggal_awal: val.tanggal_awal,
@@ -150,7 +146,7 @@ const BukuBantuBelanja = () => {
       loading = true;
       const response = await axios.post(o.url, data);
       loading = false;
-      
+
       return response.data;
     } catch (error) {
       loading = false;
@@ -161,10 +157,10 @@ const BukuBantuBelanja = () => {
 
   const pilunit = (value) => {
     setSelectedUnit(value);
-    setSelectedCategory(""); 
-    setSelectedOption(null); 
+    setSelectedCategory("");
+    setSelectedOption(null);
     setSearchText("");
-    setData([]); 
+    setData([]);
   };
   const pilkategori = (value) => {
     setSelectedCategory(value);
@@ -255,7 +251,7 @@ const BukuBantuBelanja = () => {
       setIsLoading(false);
     }
   };
- 
+
   const colomntrans = [
     {
       title: "No",
@@ -273,7 +269,7 @@ const BukuBantuBelanja = () => {
       dataIndex: "nama_unit",
       key: "nama_unit",
       style: selectedUnit !== "ALL" ? {} : { display: "none" },
-    render: (text, record) => <div>{text}</div>,
+      render: (text, record) => <div>{text}</div>,
     },
     {
       title: "Tanggal",
@@ -300,7 +296,7 @@ const BukuBantuBelanja = () => {
         if (text === "AKTIVA") {
           return <div>{formatRupiah(record.nominal) + ",00"}</div>;
         } else {
-          return ""; 
+          return "";
         }
       },
     },
@@ -312,9 +308,9 @@ const BukuBantuBelanja = () => {
       width: 200,
       render: (text, record, index) => {
         if (text === "PASIVA") {
-          return <div>{formatRupiah(record.nominal) + ",00"}</div>; 
+          return <div>{formatRupiah(record.nominal) + ",00"}</div>;
         } else {
-          return ""; 
+          return "";
         }
       },
     },
@@ -354,7 +350,7 @@ const BukuBantuBelanja = () => {
         if (text === "AKTIVA") {
           return <div>{formatRupiah(record.nominal) + ",00"}</div>;
         } else {
-          return ""; 
+          return "";
         }
       },
     },
@@ -366,9 +362,9 @@ const BukuBantuBelanja = () => {
       width: 200,
       render: (text, record, index) => {
         if (text === "PASIVA") {
-          return <div>{formatRupiah(record.nominal) + ",00"}</div>; 
+          return <div>{formatRupiah(record.nominal) + ",00"}</div>;
         } else {
-          return ""; 
+          return "";
         }
       },
     },
@@ -410,6 +406,7 @@ const BukuBantuBelanja = () => {
             isEditForm={isEditForm}
             dataTable={data}
             dataUnit={dataUnit}
+            pdfData={pdfData}
           />
 
           <ExcelCreate
@@ -472,36 +469,35 @@ const BukuBantuBelanja = () => {
             Pilih Kategori:
           </label>
           <Selects
-              style={{ height: 200 }}
-              marginBottom={10}
-              filterOption={(input, option) => {
-                const optionValue = option.props.value || "";
-                const optionChildren = option.props.children || "";
-                const inputValue = input.toLowerCase();
-            
-                return (
-                  optionValue.toLowerCase().includes(inputValue) ||
-                  optionChildren.toString().toLowerCase().includes(inputValue)
-                );
-              }}
-              onChange={pilkategori}
-              value={selectedCategory}
-              placeholder={"---Silahkan Pilih Chart of Account (CoA)---"}
-              optionContent={
-                <>
-                  
-                  {Array.isArray(dataCoa) &&
-                    dataCoa.map((item) =>
-                      item.akun_coa !== null ? (
-                        <Option key={item.akun_coa} value={item.akun_coa}>
-                          {item.keterangan}&nbsp;{item.akun_coa}
-                        </Option>
-                      ) : null
-                    )}
-                </>
-              }
-              disabled={!selectedUnit}
-            />
+            style={{ height: 200 }}
+            marginBottom={10}
+            filterOption={(input, option) => {
+              const optionValue = option.props.value || "";
+              const optionChildren = option.props.children || "";
+              const inputValue = input.toLowerCase();
+
+              return (
+                optionValue.toLowerCase().includes(inputValue) ||
+                optionChildren.toString().toLowerCase().includes(inputValue)
+              );
+            }}
+            onChange={pilkategori}
+            value={selectedCategory}
+            placeholder={"---Silahkan Pilih Chart of Account (CoA)---"}
+            optionContent={
+              <>
+                {Array.isArray(dataCoa) &&
+                  dataCoa.map((item) =>
+                    item.akun_coa !== null ? (
+                      <Option key={item.akun_coa} value={item.akun_coa}>
+                        {item.keterangan}&nbsp;{item.akun_coa}
+                      </Option>
+                    ) : null
+                  )}
+              </>
+            }
+            disabled={!selectedUnit}
+          />
         </div>
 
         <div
@@ -511,7 +507,11 @@ const BukuBantuBelanja = () => {
           <label className="block mb-1 text-md font-bold">
             Pilih Berdasarkan:
           </label>
-          <Radio.Group onChange={onChangeOption} value={selectedOption} disabled={!selectedCategory}>
+          <Radio.Group
+            onChange={onChangeOption}
+            value={selectedOption}
+            disabled={!selectedCategory}
+          >
             <Radio value={1}>Tanggal</Radio>
             <Radio value={2}>Bulan</Radio>
             <Radio value={3}>Tahun</Radio>
@@ -534,7 +534,7 @@ const BukuBantuBelanja = () => {
                 onChange={onChangeDate}
               />
               {isLoading ? (
-                <Spin size="large" /> 
+                <Spin size="large" />
               ) : (
                 <Buttons
                   labelButton={"Proses"}
@@ -567,7 +567,7 @@ const BukuBantuBelanja = () => {
               />
 
               {isLoading ? (
-                <Spin size="large" /> 
+                <Spin size="large" />
               ) : (
                 <Buttons
                   labelButton={"Proses"}
@@ -600,7 +600,7 @@ const BukuBantuBelanja = () => {
               />
 
               {isLoading ? (
-                <Spin size="large" /> 
+                <Spin size="large" />
               ) : (
                 <Buttons
                   labelButton={"Proses"}
@@ -617,21 +617,19 @@ const BukuBantuBelanja = () => {
             <p></p>
           )}
         </div>
-        <Divider/>
+        <Divider />
         <div>
-          <label className="block mb-1 text-md font-bold">
-            Cari Data:
-          </label>
+          <label className="block mb-1 text-md font-bold">Cari Data:</label>
           <Input
-            style={{ marginBottom: 16, marginTop:2 }}
+            style={{ marginBottom: 16, marginTop: 2 }}
             placeholder="Search..."
             value={searchText}
             disabled={!data || data.length === 0}
             onChange={(e) => setSearchText(e.target.value)}
           />
+        </div>
       </div>
-      </div>
-      
+
       <div
         style={{
           padding: 5,
@@ -644,27 +642,25 @@ const BukuBantuBelanja = () => {
         }}
       >
         <Table
-        
           dataSource={data.filter((item) => {
             const formattedSearchText = searchText.toLowerCase();
-    
+
             // Filter based on searchText
             const searchMatch = Object.values(item).some((value) => {
               const formattedValue = value.toString().toLowerCase();
               return formattedValue.includes(formattedSearchText);
             });
             if (searchMatch) return true;
-    
+
             // Filter based on specific date
             const searchDate = moment(searchText, "D MMMM", true);
             if (searchDate.isValid()) {
               const itemDate = moment(item.tanggal_transaksi, "YYYY-MM-DD");
               return itemDate.format("D MMMM") === searchDate.format("D MMMM");
             }
-    
+
             return false;
           })}
-          
           columns={columns}
           bordered
           pagination={{ pageSize: 50 }}
