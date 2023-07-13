@@ -1,0 +1,146 @@
+{
+  "status": "success",
+  "message": "Berhasil",
+  "data": [
+    {
+      "keterangan": "Aset",
+      "nominal_tahun_sebelum": 0,
+      "nominal_tahun_sesudah": 0
+    },
+    {
+      "keterangan": "Aset Lancar",
+      "nominal_tahun_sebelum": 0,
+      "nominal_tahun_sesudah": 0
+    },
+    {
+      "keterangan": "Kas dan Setara Kas",
+      "nominal_tahun_sebelum": 0,
+      "nominal_tahun_sesudah": 0
+    },
+    {
+      "keterangan": "Investasi Jangka Pendek",
+      "nominal_tahun_sebelum": 0,
+      "nominal_tahun_sesudah": 0
+    },
+    {
+      "keterangan": "Piutang",
+      "nominal_tahun_sebelum": 0,
+      "nominal_tahun_sesudah": 0
+    },
+    {
+      "keterangan": "Beban dibayar di muka",
+      "nominal_tahun_sebelum": 0,
+      "nominal_tahun_sesudah": 0
+    },
+    {
+      "keterangan": "Uang Muka",
+      "nominal_tahun_sebelum": 0,
+      "nominal_tahun_sesudah": 0
+    },
+    {
+      "keterangan": "Persediaan",
+      "nominal_tahun_sebelum": 0,
+      "nominal_tahun_sesudah": 0
+    },
+    {
+      "keterangan": "Aset Lancar Lainnya",
+      "nominal_tahun_sebelum": 0,
+      "nominal_tahun_sesudah": 0
+    },
+    {
+      "keterangan": "Aset Tidak Lancar",
+      "nominal_tahun_sebelum": 0,
+      "nominal_tahun_sesudah": 0
+    },
+    {
+      "keterangan": "Properti Investasi",
+      "nominal_tahun_sebelum": 0,
+      "nominal_tahun_sesudah": 0
+    },
+    {
+      "keterangan": "Investasi Jangka Panjang",
+      "nominal_tahun_sebelum": 0,
+      "nominal_tahun_sesudah": 0
+    },
+    {
+      "keterangan": "Aset Tetap",
+      "nominal_tahun_sebelum": 0,
+      "nominal_tahun_sesudah": 0
+    },
+    {
+      "keterangan": "Aset Lainnya",
+      "nominal_tahun_sebelum": 0,
+      "nominal_tahun_sesudah": 0
+    },
+    {
+      "keterangan": "Investasi Jangka Panjang Lainnya",
+      "nominal_tahun_sebelum": 0,
+      "nominal_tahun_sesudah": 0
+    },
+    {
+      "keterangan": "Liabilitas",
+      "nominal_tahun_sebelum": 0,
+      "nominal_tahun_sesudah": 0
+    },
+    {
+      "keterangan": "Liabilitas Jangka Pendek",
+      "nominal_tahun_sebelum": 0,
+      "nominal_tahun_sesudah": 0
+    },
+    {
+      "keterangan": "Utang Usaha",
+      "nominal_tahun_sebelum": 0,
+      "nominal_tahun_sesudah": 0
+    },
+    {
+      "keterangan": "Utang Pajak",
+      "nominal_tahun_sebelum": 0,
+      "nominal_tahun_sesudah": 0
+    },
+    {
+      "keterangan": "Biaya yang masih harus dibayar",
+      "nominal_tahun_sebelum": 0,
+      "nominal_tahun_sesudah": 0
+    },
+    {
+      "keterangan": "Pendapatan diterima di muka",
+      "nominal_tahun_sebelum": 0,
+      "nominal_tahun_sesudah": 0
+    },
+    {
+      "keterangan": "Pinjaman Jangka Pendek",
+      "nominal_tahun_sebelum": 0,
+      "nominal_tahun_sesudah": 0
+    },
+    {
+      "keterangan": "Imbalan Pascakerja Jangka Pendek",
+      "nominal_tahun_sebelum": 0,
+      "nominal_tahun_sesudah": 0
+    },
+    {
+      "keterangan": "Bagian Lancar Utang Jangka Panjang",
+      "nominal_tahun_sebelum": 0,
+      "nominal_tahun_sesudah": 0
+    },
+    {
+      "keterangan": "Utang Jangka Pendek Lainnya",
+      "nominal_tahun_sebelum": 0,
+      "nominal_tahun_sesudah": 0
+    },
+    {
+      "keterangan": "Liabilitas Jangka Panjang",
+      "nominal_tahun_sebelum": 0,
+      "nominal_tahun_sesudah": 0
+    },
+    {
+      "keterangan": "Liabilitas Imbalan Pascakerja",
+      "nominal_tahun_sebelum": 0,
+      "nominal_tahun_sesudah": 0
+    },
+    {
+      "keterangan": "Liabilitas Jangka Panjang Lainnya",
+      "nominal_tahun_sebelum": 0,
+      "nominal_tahun_sesudah": 0
+    }
+  ]
+}

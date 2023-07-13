@@ -2,15 +2,29 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setGlobalTitle } from "../../../store/global";
 // import { Tabel, Buttons, DatePickers } from "../../../component";
-import { Divider } from "antd";
+import { Divider, Radio, DatePicker, Spin, Table, Card, Space } from "antd";
+import { Buttons, Selects } from "../../../component";
 // import { DownloadOutlined, PlusOutlined } from "@ant-design/icons";
 import { FONTSTYLE } from "../../../component/font";
 // import { UnderConstruction } from "../../../component";
 import { fetchLapPosKeuangan } from "../../../store";
 import { DUMMY_LAP } from "../../../config/api";
+import { SyncOutlined, ReloadOutlined } from "@ant-design/icons";
+import moment from "moment";
+
+import DokumenPdf from "./DokumenPdf";
 
 const PosisiKeuangan = () => {
   const dispatch = useDispatch();
+  const { RangePicker } = DatePicker;
+
+  const cardStyle = {
+    backgroundColor: "#D8EFFF",
+    color: "black",
+    height: "400px",
+    borderRadius: "10px",
+  };
+
   const { getposisikeuangan } = useSelector(
     (state) => state.reducerLapPosisiKeuangan
   );
@@ -23,59 +37,48 @@ const PosisiKeuangan = () => {
 
   console.log("data dummy", getposisikeuangan);
 
-  // const colomLapPosisiKeu = [
-  //   {
-  //     title: "Tanggal",
-  //     dataIndex: "no",
-  //     key: "no",
-  //     width: "50%",
-  //     render: (text, record, index) => {
-  //       return (
-  //         <>
-  //           <p> {record.jenis} </p>
-  //           <p> {record.sub_jenis[index]?.keterangan} </p>
-  //           <p>
-  //             {" "}
-  //             {
-  //               record.sub_jenis[index]?.sub_keterangan[index]?.nama_keterangan
-  //             }{" "}
-  //           </p>
-  //         </>
-  //       );
-  //     },
-  //   },
-  //   {
-  //     title: "Tanggal Awal",
-  //     dataIndex: "kode_aplikasi",
-  //     key: "kode_aplikasi",
-  //     width: 200,
-  //     align: "right",
-  //     render: (text, record, index) => {
-  //       return (
-  //         <>
-  //           <p> &nbsp; </p>
-  //           <p> &nbsp; </p>
-  //           <p> {record.sub_jenis[index]?.sub_keterangan[index]?.debit} </p>
-  //         </>
-  //       );
-  //     },
-  //   },
-  //   {
-  //     title: "Tanggal Akhir",
-  //     dataIndex: "kode_modul",
-  //     key: "kode_modul",
-  //     align: "right",
-  //     render: (text, record, index) => {
-  //       return (
-  //         <>
-  //           <p> &nbsp; </p>
-  //           <p> &nbsp; </p>
-  //           <p> {record.sub_jenis[index]?.sub_keterangan[index]?.kredit} </p>
-  //         </>
-  //       );
-  //     },
-  //   },
-  // ];
+  const column = [
+    {
+      title: "Keterangan",
+      dataIndex: "no",
+      key: "no",
+      width: "50%",
+      render: (text, record, index) => {
+        return (
+          <>
+            <p> {record.keterangan} </p>
+          </>
+        );
+      },
+    },
+    {
+      title: "Tahun Sekarang",
+      dataIndex: "kode_aplikasi",
+      key: "kode_aplikasi",
+      width: 200,
+      align: "right",
+      render: (text, record, index) => {
+        return (
+          <>
+            <p> {record.ominal_tahun_sesudah} </p>
+          </>
+        );
+      },
+    },
+    {
+      title: "Tahun Sebelum",
+      dataIndex: "kode_modul",
+      key: "kode_modul",
+      align: "right",
+      render: (text, record, index) => {
+        return (
+          <>
+            <p> {record.nominal_tahun_sebelumn} </p>
+          </>
+        );
+      },
+    },
+  ];
 
   return (
     <div
@@ -126,15 +129,69 @@ const PosisiKeuangan = () => {
         </div>
       </div>
       <Divider />
-      <div className="grid grid-cols-1 gap-2 mt-5">
-        <p align="center" className="text-xl font-bold mb-5 mt-5">
-          <iframe
-            src={ DUMMY_LAP + "lapposisikeuangan.pdf"}
-            width="90%"
-            height="800px"
-            title="Dokumen Laporan Posisi Keuangan"
+      <div class="grid grid-cols-4 ">
+        <div class="h-full border-r   ">
+          <Card style={cardStyle}>
+            <Card style={{ marginBottom: 20 }}>
+              <div
+                className="grid grid-cols-1   "
+                style={{ fontFamily: FONTSTYLE.POPPINS }}
+              >
+                <label className="block mb-1 text-md font-bold">
+                  Pilih Berdasarkan:
+                </label>
+                <Space direction="vertical" size={12}>
+                  <RangePicker picker="year" />
+                </Space>
+              </div>
+            </Card>
+            <Buttons
+              labelButton={"Proses"}
+              borderColor={"#229CE1"}
+              backgroundColor={"#229CE1"}
+              color={"white"}
+              marginBottom={20}
+              icon={<SyncOutlined />}
+              // onClick={(fetchLapPosKeuangan)}
+            />
+            <DokumenPdf
+              // isEditDone={isEditDone}
+              // isEditForm={isEditForm}
+              dataTable={getposisikeuangan}
+              // dataUnit={dataUnit}
+              // pdfData={pdfData}
+            />
+          </Card>
+        </div>
+        <div class="col-span-3 ml-5">
+          <Table
+            // dataSource={data.filter((item) => {
+            //   const formattedSearchText = searchText.toLowerCase();
+
+            //   // Filter based on searchText
+            //   const searchMatch = Object.values(item).some((value) => {
+            //     const formattedValue = value.toString().toLowerCase();
+            //     return formattedValue.includes(formattedSearchText);
+            //   });
+            //   if (searchMatch) return true;
+
+            //   // Filter based on specific date
+            //   const searchDate = moment(searchText, "D MMMM", true);
+            //   if (searchDate.isValid()) {
+            //     const itemDate = moment(item.tanggal_transaksi, "YYYY-MM-DD");
+            //     return (
+            //       itemDate.format("D MMMM") === searchDate.format("D MMMM")
+            //     );
+            //   }
+
+            //   return false;
+            // })}
+            columns={column}
+            bordered
+            pagination={{ pageSize: 50 }}
+            scroll={{ y: 2000 }}
           />
-        </p>
+        </div>
       </div>
 
       {/* 
