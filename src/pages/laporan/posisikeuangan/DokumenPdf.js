@@ -58,7 +58,7 @@ function DokumenPdf({ dataTable }) {
       html: "#tablepetugas",
       margin: {
         top: 150,
-        bottom: 230,
+        bottom: 0,
       },
       headStyles: {
         valign: "middle",
@@ -78,11 +78,9 @@ function DokumenPdf({ dataTable }) {
         cellWidth: "auto",
       },
       columnStyles: {
-        1: { halign: "center" },
-        2: { halign: "left" },
-
-        3: { halign: "right", cellWidth: "wrap" },
-        4: { halign: "right", cellWidth: "wrap" },
+        0: { halign: "left" },
+        1: { halign: "right", cellWidth: "wrap" },
+        2: { halign: "right", cellWidth: "wrap" },
       },
     });
 
@@ -201,64 +199,23 @@ function DokumenPdf({ dataTable }) {
   return (
     <div>
       <div style={{ display: "none" }}>
-        <table id="tableheader">
-          <tbody>
-            <tr>
-              <td>Departemen/Lembaga</td>
-              <td>:</td>
-              <td>{data.lembaga}</td>
-            </tr>
-            <tr>
-              <td>Unit/Organisasi</td>
-              <td>:</td>
-              <td>{data.organisasi}</td>
-            </tr>
-            <tr>
-              <td>Provinsi/Kab/Kota</td>
-              <td>:</td>
-              <td>{data.provinsi}</td>
-            </tr>
-            <tr>
-              <td>Satuan Kerja</td>
-              <td>:</td>
-              <td>{data.satuankerja}</td>
-            </tr>
-            <tr>
-              <td>COA</td>
-              <td>:</td>
-              <td>{data.coa}</td>
-            </tr>
-            <tr>
-              <td>Tahun Anggaran</td>
-              <td>:</td>
-              <td>{data.tahunanggaran}</td>
-            </tr>
-            <tr>
-              <td>Bulan</td>
-              <td>:</td>
-              <td>{data.bulan}</td>
-            </tr>
-          </tbody>
-        </table>
-
         <TableData id="tablepetugas" dataTable={dataTable} />
       </div>
-      <Tooltip title="Klik Untuk Unduh PDF">
-        <Buttons
-          // disable={isEditDone === true && isEditForm === false ? false : true}
-          // backgroundColor={
-          //   isEditDone === true && isEditForm === false ? "maroon" : "lightgray"
-          // }
-          labelButton={"Unduh PDF"}
-          color={"white"}
-          icon={<FilePdfOutlined />}
-          borderColor="white"
-          borderRadius={10}
-          onClick={() => {
-            generatePdf();
-          }}
-        />
-      </Tooltip>
+
+      <Buttons
+        // disable={isEditDone === true && isEditForm === false ? false : true}
+        // backgroundColor={
+        //   isEditDone === true && isEditForm === false ? "maroon" : "lightgray"
+        // }
+        labelButton={"Unduh PDF"}
+        color={"white"}
+        icon={<FilePdfOutlined />}
+        borderColor="white"
+        borderRadius={10}
+        onClick={() => {
+          generatePdf();
+        }}
+      />
     </div>
   );
 }

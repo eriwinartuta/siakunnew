@@ -40,8 +40,8 @@ const PosisiKeuangan = () => {
   const column = [
     {
       title: "Keterangan",
-      dataIndex: "no",
-      key: "no",
+      dataIndex: "keterangan",
+      key: "keterangan",
       width: "50%",
       render: (text, record, index) => {
         return (
@@ -53,27 +53,27 @@ const PosisiKeuangan = () => {
     },
     {
       title: "Tahun Sekarang",
-      dataIndex: "kode_aplikasi",
-      key: "kode_aplikasi",
+      dataIndex: "nominal_tahun_sesudah",
+      key: "nominal_tahun_sesudah",
       width: 200,
       align: "right",
       render: (text, record, index) => {
         return (
           <>
-            <p> {record.ominal_tahun_sesudah} </p>
+            <p> {record.nominal_tahun_sesudah} </p>
           </>
         );
       },
     },
     {
       title: "Tahun Sebelum",
-      dataIndex: "kode_modul",
-      key: "kode_modul",
+      dataIndex: "nominal_tahun_sebelum",
+      key: "nominal_tahun_sebelum",
       align: "right",
       render: (text, record, index) => {
         return (
           <>
-            <p> {record.nominal_tahun_sebelumn} </p>
+            <p> {record.nominal_tahun_sebelum} </p>
           </>
         );
       },
@@ -152,7 +152,7 @@ const PosisiKeuangan = () => {
               color={"white"}
               marginBottom={20}
               icon={<SyncOutlined />}
-              // onClick={(fetchLapPosKeuangan)}
+              // onClick={fetchLapPosKeuangan}
             />
             <DokumenPdf
               // isEditDone={isEditDone}
@@ -188,6 +188,7 @@ const PosisiKeuangan = () => {
             // })}
             columns={column}
             bordered
+            dataSource={getposisikeuangan}
             pagination={{ pageSize: 50 }}
             scroll={{ y: 2000 }}
           />
