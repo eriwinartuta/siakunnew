@@ -138,7 +138,7 @@ const BukuBantuBelanja = () => {
     setPdfData(data);
     console.log("data input", data);
     const o = {
-      url: URL_SIAKUN + BASE_PATH_KARTU.list_kartu_nocontra,
+      url: URL_SIAKUN + BASE_PATH_KARTU.list_kartu,
       data: data,
     };
     let loading = false;
@@ -238,13 +238,13 @@ const BukuBantuBelanja = () => {
     }
 
     val.akun_coa = selectedCategory;
-    val.kode_unit = selectedUnit === "ALL" ? "" : selectedUnit;
+    val.kode_unit = selectedUnit === "ALL"  ? "" : selectedUnit;
     try {
       const data = await cekJadwal(val);
-      setData(data.data);
+      setData(data?.data);
       setIsEditForm(false);
       setIsEditDone(true);
-      console.log(data);
+      console.log("dddd",data);
     } catch (error) {
       console.error(error);
     } finally {
@@ -288,32 +288,68 @@ const BukuBantuBelanja = () => {
     },
     {
       title: "Debit",
-      dataIndex: "penempatan",
-      key: "Aktiva",
+      dataIndex: "debit",
+      key: "debit",
       align: "right",
       width: 200,
       render: (text, record, index) => {
-        if (text === "AKTIVA") {
-          return <div>{formatRupiah(record.nominal) + ",00"}</div>;
-        } else {
-          return "";
-        }
-      },
+        {formatRupiah(text)}
+      }
+      // render: (text, record, index) => {
+      //   if (text === "AKTIVA") {
+      //     return <div>{formatRupiah(record.nominal) + ",00"}</div>;
+      //   } else {
+      //     return "";
+      //   }
+      // },
     },
     {
       title: "Kredit",
-      dataIndex: "penempatan",
-      key: "pasiva",
+      dataIndex: "kredit",
+      key: "kredit",
       align: "right",
       width: 200,
       render: (text, record, index) => {
-        if (text === "PASIVA") {
-          return <div>{formatRupiah(record.nominal) + ",00"}</div>;
-        } else {
-          return "";
-        }
-      },
+        return(
+          formatRupiah(text)
+        )
+      }
+      // render: (text, record, index) => {
+      //   if (text === "PASIVA") {
+      //     return <div>{formatRupiah(record.nominal) + ",00"}</div>;
+      //   } else {
+      //     return "";
+      //   }
+      // },
     },
+    // {
+    //   title: "Debit",
+    //   dataIndex: "penempatan",
+    //   key: "Aktiva",
+    //   align: "right",
+    //   width: 200,
+    //   render: (text, record, index) => {
+    //     if (text === "AKTIVA") {
+    //       return <div>{formatRupiah(record.nominal) + ",00"}</div>;
+    //     } else {
+    //       return "";
+    //     }
+    //   },
+    // },
+    // {
+    //   title: "Kredit",
+    //   dataIndex: "penempatan",
+    //   key: "pasiva",
+    //   align: "right",
+    //   width: 200,
+    //   render: (text, record, index) => {
+    //     if (text === "PASIVA") {
+    //       return <div>{formatRupiah(record.nominal) + ",00"}</div>;
+    //     } else {
+    //       return "";
+    //     }
+    //   },
+    // },
   ];
   const colomn = [
     {
@@ -339,35 +375,81 @@ const BukuBantuBelanja = () => {
       title: " Keterangan ",
       dataIndex: "keterangan",
       key: "keterangan",
+      render: (text, record,index) =>{
+        return(
+          <div>
+            <p>{text}&nbsp; - &nbsp;[{record.nomor_surat}] &nbsp;&nbsp;-&nbsp;&nbsp;{record.perihal}</p>
+          </div>
+        )
+      }
     },
     {
       title: "Debit",
-      dataIndex: "penempatan",
-      key: "Aktiva",
+      dataIndex: "debit",
+      key: "debit",
       align: "right",
       width: 200,
       render: (text, record, index) => {
-        if (text === "AKTIVA") {
-          return <div>{formatRupiah(record.nominal) + ",00"}</div>;
-        } else {
-          return "";
-        }
-      },
+        return(
+          formatRupiah(text)
+        )
+        
+      }
+      // render: (text, record, index) => {
+      //   if (text === "AKTIVA") {
+      //     return <div>{formatRupiah(record.nominal) + ",00"}</div>;
+      //   } else {
+      //     return "";
+      //   }
+      // },
     },
     {
       title: "Kredit",
-      dataIndex: "penempatan",
-      key: "pasiva",
+      dataIndex: "kredit",
+      key: "kredit",
       align: "right",
       width: 200,
       render: (text, record, index) => {
-        if (text === "PASIVA") {
-          return <div>{formatRupiah(record.nominal) + ",00"}</div>;
-        } else {
-          return "";
-        }
-      },
+        return(
+          formatRupiah(text)
+        )
+      }
+      // render: (text, record, index) => {
+      //   if (text === "PASIVA") {
+      //     return <div>{formatRupiah(record.nominal) + ",00"}</div>;
+      //   } else {
+      //     return "";
+      //   }
+      // },
     },
+    // {
+    //   title: "Debit",
+    //   dataIndex: "penempatan",
+    //   key: "Aktiva",
+    //   align: "right",
+    //   width: 200,
+    //   render: (text, record, index) => {
+    //     if (text === "AKTIVA") {
+    //       return <div>{formatRupiah(record.nominal) + ",00"}</div>;
+    //     } else {
+    //       return "";
+    //     }
+    //   },
+    // },
+    // {
+    //   title: "Kredit",
+    //   dataIndex: "penempatan",
+    //   key: "pasiva",
+    //   align: "right",
+    //   width: 200,
+    //   render: (text, record, index) => {
+    //     if (text === "PASIVA") {
+    //       return <div>{formatRupiah(record.nominal) + ",00"}</div>;
+    //     } else {
+    //       return "";
+    //     }
+    //   },
+    // },
   ];
 
   const columns = selectedUnit === "ALL" ? colomntrans : colomn;
@@ -448,6 +530,7 @@ const BukuBantuBelanja = () => {
             optionContent={
               <>
                 <Option value="ALL">---Semua Unit---</Option>
+                <Option value="UN">---Semua Unit Tes--</Option>
                 {Array.isArray(dataUnit) &&
                   dataUnit.map((item) =>
                     item.kode_unit !== null ? (
@@ -642,25 +725,45 @@ const BukuBantuBelanja = () => {
         }}
       >
         <Table
-          dataSource={data.filter((item) => {
-            const formattedSearchText = searchText.toLowerCase();
+        dataSource={data.filter((item) => {
+          const formattedSearchText = searchText.toLowerCase();
+        
+          // Filter based on searchText
+          const searchMatch = Object.values(item).some((value) => {
+            const formattedValue = (value ?? "").toString().toLowerCase();
+            return formattedValue.includes(formattedSearchText);
+          });
+        
+          if (searchMatch) return true;
+        
+          // Filter based on specific date
+          const searchDate = moment(searchText, "D MMMM", true);
+          if (searchDate.isValid()) {
+            const itemDate = moment(item.tanggal_transaksi, "YYYY-MM-DD");
+            return itemDate.format("D MMMM") === searchDate.format("D MMMM");
+          }
+        
+          return false;
+        })}
+          // dataSource={data.filter((item) => {
+          //   const formattedSearchText = searchText.toLowerCase();
 
-            // Filter based on searchText
-            const searchMatch = Object.values(item).some((value) => {
-              const formattedValue = value.toString().toLowerCase();
-              return formattedValue.includes(formattedSearchText);
-            });
-            if (searchMatch) return true;
+          //   // Filter based on searchText
+          //   const searchMatch = Object.values(item).some((value) => {
+          //     const formattedValue = value.toString().toLowerCase();
+          //     return formattedValue.includes(formattedSearchText);
+          //   });
+          //   if (searchMatch) return true;
 
-            // Filter based on specific date
-            const searchDate = moment(searchText, "D MMMM", true);
-            if (searchDate.isValid()) {
-              const itemDate = moment(item.tanggal_transaksi, "YYYY-MM-DD");
-              return itemDate.format("D MMMM") === searchDate.format("D MMMM");
-            }
+          //   // Filter based on specific date
+          //   const searchDate = moment(searchText, "D MMMM", true);
+          //   if (searchDate.isValid()) {
+          //     const itemDate = moment(item.tanggal_transaksi, "YYYY-MM-DD");
+          //     return itemDate.format("D MMMM") === searchDate.format("D MMMM");
+          //   }
 
-            return false;
-          })}
+          //   return false;
+          // })}
           columns={columns}
           bordered
           pagination={{ pageSize: 50 }}

@@ -128,9 +128,10 @@ export const BASE_PATH_REKONSILIASI = {
     POST_REKON : "/rekonsiliasi/selection-pertanggal"
 }
 export const BASE_PATH_KARTU = {
-list_kartu : "/apiv1/pagu-jurnal/list-kas-jurnal",
+list_kartu : "/apiv1/pagu-jurnal/list-jurnal-pagu",
 list_kartu_nocontra: "/apiv1/pagu-jurnal/list-kas-jurnal-nocontra",
 get_coa: "/apiv1/pagu-jurnal/list-selection-unit/"
+
 }
 
 export const BASE_PATH_PANUTAN = {
