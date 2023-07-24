@@ -42,9 +42,9 @@ const ExcelCreate = ({
           return 20;
         case "keterangan":
           return 20;
-        case "Aktiva":
+        case "debit":
           return 20;
-        case "pasiva":
+        case "kredit":
           return 25;
       }
     };
@@ -62,8 +62,8 @@ const ExcelCreate = ({
         no: "No",
         tanggal_transaksi: "Tanggal Transaksi",
         keterangan: "Keterangan",
-        Aktiva: "Debit",
-        pasiva: "Kredit",
+        debit: "Debit",
+        kredit: "Kredit",
       },
     ];
     headerCol.forEach((item, i) => {
@@ -152,9 +152,9 @@ const ExcelCreate = ({
       let d = {
         no: i + 1,
         tanggal_transaksi: e.tanggal_transaksi,
-        keterangan: e.keterangan,
-        Aktiva: e.penempatan === "AKTIVA" ? parseInt(e.nominal) : 0,
-        pasiva: e.penempatan === "PASIVA" ? parseInt(e.nominal) : 0,
+        keterangan: e.keterangan + e.nomor_surat + e.perihal,
+        debit: e.debit,
+        kredit: e.kredit,
       };
       return d;
     });
@@ -178,8 +178,8 @@ const ExcelCreate = ({
         };
       });
     });
-    wsDataPegawai.getColumn("Aktiva").numFmt = "Rp#,##0.00;[Red]-Rp#,##0.00";
-    wsDataPegawai.getColumn("pasiva").numFmt = "Rp#,##0.00;[Red]-Rp#,##0.00";
+    wsDataPegawai.getColumn("debit").numFmt = "Rp#,##0.00;[Red]-Rp#,##0.00";
+    wsDataPegawai.getColumn("kredit").numFmt = "Rp#,##0.00;[Red]-Rp#,##0.00";
 
     await workbook.xlsx
       .writeBuffer()

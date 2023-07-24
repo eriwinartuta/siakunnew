@@ -21,21 +21,17 @@ function TableData({ id, dataTable }) {
                 <td>{index + 1}</td>
 
                 <td>{res?.tanggal_transaksi}</td>
-                <td>{res?.keterangan}</td>
+
                 <td>
-                  {res?.penempatan === "AKTIVA" ? (
-                    <div>{formatRupiah(res?.nominal) + ",00"}</div>
-                  ) : (
-                    ""
-                  )}
+                  {
+                    <p>
+                      {res?.keterangan}&nbsp; - &nbsp;[{res?.nomor_surat}]
+                      &nbsp;&nbsp;-&nbsp;&nbsp;{res?.perihal}
+                    </p>
+                  }
                 </td>
-                <td>
-                  {res?.penempatan === "PASIVA" ? (
-                    <div>{formatRupiah(res?.nominal) + ",00"}</div>
-                  ) : (
-                    ""
-                  )}
-                </td>
+                <td>{formatRupiah(res?.debit)}</td>
+                <td>{formatRupiah(res?.kredit)}</td>
 
                 {/* <td></td> */}
               </tr>
