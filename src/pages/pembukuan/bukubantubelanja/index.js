@@ -7,6 +7,7 @@ import {
   Divider,
   notification,
   Spin,
+  Tag,
 } from "antd";
 import React, { useEffect, useState } from "react";
 import { Buttons, Selects } from "../../../component";
@@ -265,9 +266,10 @@ const BukuBantuBelanja = () => {
       },
     },
     {
-      title: "Unit",
-      dataIndex: "nama_unit",
-      key: "nama_unit",
+      title: "Kode Unit",
+      dataIndex: "kode_unit",
+      key: "kode_unit",
+      width: 150,
       style: selectedUnit !== "ALL" ? {} : { display: "none" },
       render: (text, record) => <div>{text}</div>,
     },
@@ -285,6 +287,13 @@ const BukuBantuBelanja = () => {
       title: " Keterangan ",
       dataIndex: "keterangan",
       key: "keterangan",
+      render: (text, record,index) =>{
+        return(
+          <div>
+            <p>{text}&nbsp; - &nbsp;<Tag color="#2db7f5">[{record.nomor_surat}]</Tag>&nbsp;&nbsp;-&nbsp;&nbsp;{record.perihal}</p>
+          </div>
+        )
+      }
     },
     {
       title: "Debit",
@@ -293,7 +302,10 @@ const BukuBantuBelanja = () => {
       align: "right",
       width: 200,
       render: (text, record, index) => {
-        {formatRupiah(text)}
+        return(
+          formatRupiah(text)
+        )
+        
       }
       // render: (text, record, index) => {
       //   if (text === "AKTIVA") {
@@ -322,6 +334,7 @@ const BukuBantuBelanja = () => {
       //   }
       // },
     },
+    // 
     // {
     //   title: "Debit",
     //   dataIndex: "penempatan",

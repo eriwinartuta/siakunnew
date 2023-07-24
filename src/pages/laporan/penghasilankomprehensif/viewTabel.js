@@ -1,0 +1,195 @@
+// import React from 'react';
+// import DataTable from './DataTable';
+
+// const PenghasilanKomprehensif = () => {
+//     const dataSource = {
+//         "data": [
+//           {
+//             "Tanpa Pembatasan dari Pemberi Sumber Daya": [
+//               {
+//                 "Pendapatan": [
+//                   {
+//                     "name": "Dana hibah",
+//                     "sebelum": "100000",
+//                     "setelah": "100000"
+//                   },
+//                   {
+//                     "name": "Jasa Layanan",
+//                     "sebelum": "100000",
+//                     "setelah": "100000"
+//                   },
+//                   {
+//                     "name": "Penghasilan investasi jangka Panjang",
+//                     "sebelum": "100000",
+//                     "setelah": "100000"
+//                   },
+//                   {
+//                     "name": "Penghasilan investasi jangka pendek",
+//                     "sebelum": "100000",
+//                     "setelah": "100000"
+//                   },
+//                   {
+//                     "name": "Lain-lain",
+//                     "sebelum": "100000",
+//                     "setelah": "100000"
+//                   }
+//                 ],
+//                 "Beban": [
+//                   {
+//                     "name": "Arterial Blood Gas",
+//                     "sebelum": "100000",
+//                     "setelah": "100000"
+//                   },
+//                   {
+//                     "name": "BMP",
+//                     "sebelum": "100000",
+//                     "setelah": "100000"
+//                   },
+//                   {
+//                     "name": "BNP",
+//                     "sebelum": "100000",
+//                     "setelah": "100000"
+//                   },
+//                   {
+//                     "name": "BUN",
+//                     "sebelum": "100000",
+//                     "setelah": "100000"
+//                   }
+//                 ]
+//               }
+//             ],
+//             "Dengan Pembatasan dari Pemberi Sumber Daya": [
+//               {
+//                 "Pendapatan": [
+//                   {
+//                     "name": "Dana Hibah",
+//                     "sebelum": "100000",
+//                     "setelah": "100000"
+//                   },
+//                   {
+//                     "name": "Penghasilan Investasi Jangka Panjang (Catatan D)",
+//                     "sebelum": "100000",
+//                     "setelah": "100000"
+//                   }
+//                 ],
+//                 "Beban": [
+//                   {
+//                     "name": "Beban Akibat Kebakaran",
+//                     "sebelum": "100000",
+//                     "setelah": "100000"
+//                   }
+//                 ]
+//               }
+//             ]
+//           }
+//         ]
+//       };
+//       console.log("dataaaaaaaaaaaaaaaaa", dataSource.data);
+//   const data = dataSource.data;
+
+//   return (
+//     <div>
+//       <h1>Your Table</h1>
+//       <DataTable dataSource={dataSource} />
+//     </div>
+//   );
+// };
+
+// export default PenghasilanKomprehensif;
+
+import React from 'react';
+import DataTable from './tabel';
+
+const PenghasilanKomprehensif = () => {
+  const dataSource = {
+    "data": [
+        {
+            "Tanpa Pembatasan dari Pemberi Sumber Daya": [
+              {
+                "Pendapatan": [
+                  {
+                    "name": "Dana hibah",
+                    "sebelum": "100000",
+                    "setelah": "100000"
+                  },
+                  {
+                    "name": "Jasa Layanan",
+                    "sebelum": "100000",
+                    "setelah": "100000"
+                  },
+                  {
+                    "name": "Penghasilan investasi jangka Panjang",
+                    "sebelum": "100000",
+                    "setelah": "100000"
+                  },
+                  {
+                    "name": "Penghasilan investasi jangka pendek",
+                    "sebelum": "100000",
+                    "setelah": "100000"
+                  },
+                  {
+                    "name": "Lain-lain",
+                    "sebelum": "100000",
+                    "setelah": "100000"
+                  }
+                ],
+                "Beban": [
+                  {
+                    "name": "Arterial Blood Gas",
+                    "sebelum": "100000",
+                    "setelah": "100000"
+                  },
+                  {
+                    "name": "BMP",
+                    "sebelum": "100000",
+                    "setelah": "100000"
+                  },
+                  {
+                    "name": "BNP",
+                    "sebelum": "100000",
+                    "setelah": "100000"
+                  },
+                  {
+                    "name": "BUN",
+                    "sebelum": "100000",
+                    "setelah": "100000"
+                  }
+                ]
+              }
+            ],
+            "Dengan Pembatasan dari Pemberi Sumber Daya": [
+              {
+                "Pendapatan": [
+                  {
+                    "name": "Dana Hibah",
+                    "sebelum": "100000",
+                    "setelah": "100000"
+                  },
+                  {
+                    "name": "Penghasilan Investasi Jangka Panjang (Catatan D)",
+                    "sebelum": "100000",
+                    "setelah": "100000"
+                  }
+                ],
+                "Beban": [
+                  {
+                    "name": "Beban Akibat Kebakaran",
+                    "sebelum": "100000",
+                    "setelah": "100000"
+                  }
+                ]
+              }
+            ]
+          }
+    ]
+  };
+
+  return (
+    <div>
+      <h1>Your Table</h1>
+      <DataTable dataSource={dataSource} />
+    </div>
+  );
+};
+
+export default PenghasilanKomprehensif;
