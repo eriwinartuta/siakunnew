@@ -412,6 +412,7 @@ import React from 'react';
 import DataTable from './tabel';
 import './style.css';
 import { FONTSTYLE } from "../../../component/font";
+import PDFDocument from './PDFDocument';
 const PenghasilanKomprehensif = () => {
   const dataSource = {
     "data": [
@@ -507,6 +508,10 @@ const PenghasilanKomprehensif = () => {
         }}
       >
         <div>
+          <div  style={{
+          display: "flex",
+          justifyContent: "space-between",
+        }}>
           <h5
             style={{
               fontWeight: "700",
@@ -517,9 +522,14 @@ const PenghasilanKomprehensif = () => {
           >
             Laporan Penghasilan Komprehensif
           </h5>
+          </div>
+          <div>
+            <PDFDocument dataSource={dataSource} />
+        </div>
         </div>
         </div>
       <DataTable dataSource={dataSource} />
+      
     </div>
     
   );

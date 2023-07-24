@@ -98,9 +98,10 @@
 // export default PenghasilanKomprehensif;
 
 import React from 'react';
+import PDFDocument from './PDFDocument';
 import DataTable from './tabel';
 
-const PenghasilanKomprehensif = () => {
+const PenghasilanKomprehensif = ({ dataSource }) => {
   const dataSource = {
     "data": [
         {
@@ -188,7 +189,11 @@ const PenghasilanKomprehensif = () => {
     <div>
       <h1>Your Table</h1>
       <DataTable dataSource={dataSource} />
+      <div>
+            <PDFDocument dataSource={dataSource} />
+        </div>
     </div>
+   
   );
 };
 

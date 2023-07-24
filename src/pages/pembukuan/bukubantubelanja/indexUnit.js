@@ -5,7 +5,7 @@ import {
     Select,
     DatePicker,
     Divider,
-    notification, Spin
+    notification, Spin, Tag
   } from "antd";
   import React, { useEffect, useState } from "react";
   import { Buttons, Selects } from "../../../component";
@@ -96,7 +96,7 @@ import {
       };
   
       const o = {
-        url: URL_SIAKUN + BASE_PATH_KARTU.list_kartu_nocontra,
+        url: URL_SIAKUN + BASE_PATH_KARTU.list_kartu,
         data: data,
       };
       let loading = false;
@@ -204,9 +204,65 @@ import {
       }
     };
   
+    // const colomntrans = [
+    //   {
+    //     title: "No",
+    //     dataIndex: "index",
+    //     key: "index",
+    //     width: 70,
+    //     render: (_, record, index) => {
+    //       return <p className="m-0">{index + 1}</p>;
+    //     },
+    //   },
+    //   {
+    //     title: "Tanggal",
+    //     dataIndex: "tanggal_transaksi",
+    //     key: "tanggal_transaksi",
+    //     width: 150,
+    //     sorter: (a, b) =>
+    //       new Date(a.tanggal_transaksi).getTime() -
+    //       new Date(b.tanggal_transaksi).getTime(),
+    //     render: (text, record) => <div>{formatDate(text)}</div>,
+    //   },
+    //   {
+    //     title: " Keterangan ",
+    //     dataIndex: "keterangan",
+    //     key: "keterangan",
+    //   },
+    //   {
+    //     title: "Debit",
+    //     dataIndex: "penempatan",
+    //     key: "Aktiva",
+    //     align: "right",
+    //     width: 200,
+    //     render: (text, record, index) => {
+    //       if (text === "AKTIVA") {
+    //         return <div>{formatRupiah(record.nominal) + ",00"}</div>; 
+    //       } else {
+    //         return ""; 
+    //       }
+    //     },
+    //   },
+    //   {
+    //     title: "Kredit",
+    //     dataIndex: "penempatan",
+    //     key: "pasiva",
+    //     align: "right",
+    //     width: 200,
+    //     render: (text, record, index) => {
+    //       if (text === "PASIVA") {
+    //         return <div>{formatRupiah(record.nominal) + ",00"}</div>;
+    //       } else {
+    //         return "";
+    //       }
+    //     },
+    //   },
+    // ];
     const colomntrans = [
       {
         title: "No",
+        key: "no",
+  
         dataIndex: "index",
         key: "index",
         width: 70,
@@ -214,6 +270,14 @@ import {
           return <p className="m-0">{index + 1}</p>;
         },
       },
+      // {
+      //   title: "Kode Unit",
+      //   dataIndex: "kode_unit",
+      //   key: "kode_unit",
+      //   width: 150,
+      //   style: selectedUnit !== "ALL" ? {} : { display: "none" },
+      //   render: (text, record) => <div>{text}</div>,
+      // },
       {
         title: "Tanggal",
         dataIndex: "tanggal_transaksi",
@@ -228,35 +292,82 @@ import {
         title: " Keterangan ",
         dataIndex: "keterangan",
         key: "keterangan",
+        render: (text, record,index) =>{
+          return(
+            <div>
+              <p>{text}&nbsp; - &nbsp;<Tag color="#2db7f5">[{record.nomor_surat}]</Tag>&nbsp;&nbsp;-&nbsp;&nbsp;{record.perihal}</p>
+            </div>
+          )
+        }
       },
       {
         title: "Debit",
-        dataIndex: "penempatan",
-        key: "Aktiva",
+        dataIndex: "debit",
+        key: "debit",
         align: "right",
         width: 200,
         render: (text, record, index) => {
-          if (text === "AKTIVA") {
-            return <div>{formatRupiah(record.nominal) + ",00"}</div>; 
-          } else {
-            return ""; 
-          }
-        },
+          return(
+            formatRupiah(text)
+          )
+          
+        }
+        // render: (text, record, index) => {
+        //   if (text === "AKTIVA") {
+        //     return <div>{formatRupiah(record.nominal) + ",00"}</div>;
+        //   } else {
+        //     return "";
+        //   }
+        // },
       },
       {
         title: "Kredit",
-        dataIndex: "penempatan",
-        key: "pasiva",
+        dataIndex: "kredit",
+        key: "kredit",
         align: "right",
         width: 200,
         render: (text, record, index) => {
-          if (text === "PASIVA") {
-            return <div>{formatRupiah(record.nominal) + ",00"}</div>;
-          } else {
-            return "";
-          }
-        },
+          return(
+            formatRupiah(text)
+          )
+        }
+        // render: (text, record, index) => {
+        //   if (text === "PASIVA") {
+        //     return <div>{formatRupiah(record.nominal) + ",00"}</div>;
+        //   } else {
+        //     return "";
+        //   }
+        // },
       },
+      // 
+      // {
+      //   title: "Debit",
+      //   dataIndex: "penempatan",
+      //   key: "Aktiva",
+      //   align: "right",
+      //   width: 200,
+      //   render: (text, record, index) => {
+      //     if (text === "AKTIVA") {
+      //       return <div>{formatRupiah(record.nominal) + ",00"}</div>;
+      //     } else {
+      //       return "";
+      //     }
+      //   },
+      // },
+      // {
+      //   title: "Kredit",
+      //   dataIndex: "penempatan",
+      //   key: "pasiva",
+      //   align: "right",
+      //   width: 200,
+      //   render: (text, record, index) => {
+      //     if (text === "PASIVA") {
+      //       return <div>{formatRupiah(record.nominal) + ",00"}</div>;
+      //     } else {
+      //       return "";
+      //     }
+      //   },
+      // },
     ];
     return (
       <div className="p-5 bg-white rounded-lg">
@@ -502,21 +613,22 @@ import {
           <Table
             dataSource={data.filter((item) => {
               const formattedSearchText = searchText.toLowerCase();
-      
+            
               // Filter based on searchText
               const searchMatch = Object.values(item).some((value) => {
-                const formattedValue = value.toString().toLowerCase();
+                const formattedValue = (value ?? "").toString().toLowerCase();
                 return formattedValue.includes(formattedSearchText);
               });
+            
               if (searchMatch) return true;
-      
+            
               // Filter based on specific date
               const searchDate = moment(searchText, "D MMMM", true);
               if (searchDate.isValid()) {
                 const itemDate = moment(item.tanggal_transaksi, "YYYY-MM-DD");
                 return itemDate.format("D MMMM") === searchDate.format("D MMMM");
               }
-      
+            
               return false;
             })}
             columns={colomntrans}
