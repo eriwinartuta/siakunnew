@@ -49,6 +49,9 @@
 import React from 'react';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import { Buttons } from '../../../component';
+import { FilePdfOutlined } from "@ant-design/icons";
+
 const DataTable = ({ dataSource }) => {
     console.log("DataSource Received:", dataSource);
   if (!dataSource || !dataSource.data || dataSource.data.length === 0) {
@@ -154,6 +157,20 @@ const DataTable = ({ dataSource }) => {
 
   return (
     <div>
+      <div className='flex justify-end m-2'>
+        <Buttons
+          labelButton={"Download Laporan Penghasilan Komprehensif"}
+          borderColor={"maroon"}
+          backgroundColor={"maroon"}
+          borderRadius={10}
+          icon={<FilePdfOutlined/>}
+          color={"white"}
+          marginLeft={5}
+          onClick={handleGeneratePDF}
+          />
+      </div>
+      
+      {/* <button onClick={handleGeneratePDF}>PDF</button> */}
     <table>
       <thead>
         <tr>
@@ -219,7 +236,7 @@ const DataTable = ({ dataSource }) => {
         })}
       </tbody>
     </table>
-    <button onClick={handleGeneratePDF}>PDF</button>
+    
     </div>
   );
 };

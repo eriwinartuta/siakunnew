@@ -543,7 +543,7 @@ const BukuBantuBelanja = () => {
             optionContent={
               <>
                 <Option value="ALL">---Semua Unit---</Option>
-                <Option value="UN">---Semua Unit Tes--</Option>
+                {/* <Option value="UN">---Semua Unit Tes--</Option> */}
                 {Array.isArray(dataUnit) &&
                   dataUnit.map((item) =>
                     item.kode_unit !== null ? (
