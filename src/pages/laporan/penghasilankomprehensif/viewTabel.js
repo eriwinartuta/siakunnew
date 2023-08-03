@@ -136,22 +136,32 @@ const PenghasilanKomprehensif = ({ dataSource }) => {
                 ],
                 "Beban": [
                   {
-                    "name": "Arterial Blood Gas",
+                    "name": "Gaji dan Upah",
                     "sebelum": "100000",
                     "setelah": "100000"
                   },
                   {
-                    "name": "BMP",
+                    "name": "Jasa dan Profesional",
                     "sebelum": "100000",
                     "setelah": "100000"
                   },
                   {
-                    "name": "BNP",
+                    "name": "Administratif",
                     "sebelum": "100000",
                     "setelah": "100000"
                   },
                   {
-                    "name": "BUN",
+                    "name": "Depresiasi",
+                    "sebelum": "100000",
+                    "setelah": "100000"
+                  },
+                  {
+                    "name": "Bunga",
+                    "sebelum": "100000",
+                    "setelah": "100000"
+                  },
+                  {
+                    "name": "Lain-Lain",
                     "sebelum": "100000",
                     "setelah": "100000"
                   }
